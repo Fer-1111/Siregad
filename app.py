@@ -5,7 +5,12 @@ import streamlit as st
 import pandas as pd
 
 from batch_writer import escribir_batch
-from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA
+# Barquito es opcional: si el archivo de config está desactualizado, evitamos que la app falle
+try:
+    from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA, CONFIG_DMH, CONFIG_BARQUITO
+except ImportError:
+    from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA, CONFIG_DMH
+    CONFIG_BARQUITO = {}
 from extractor import extraer_movimientos, extraer_siregad
 from validator import validar_inventario
 
@@ -25,10 +30,18 @@ DIVISIONES_CONFIG = {
     "San Antonio": CONFIG_SAN_ANTONIO,
     "Radomiro Tomic": CONFIG_RT,
     "Chuquicamata": CONFIG_CHUQUICAMATA,
+    "Ministro Hales": CONFIG_DMH,
+    "Barquito": CONFIG_BARQUITO,
 }
 
 # Mapeo de palabras clave para detectar división en nombre de archivo
+# IMPORTANTE: El orden importa - las más específicas deben ir primero
 KEYWORDS_DIVISION = {
+    "san antonio": "San Antonio",    # Más específico
+    "sanantonio": "San Antonio",
+    "rt -": "Radomiro Tomic",        # Más específico que solo "rt"
+    "dmh": "Ministro Hales",         # Antes de "dch" para evitar conflictos
+    "dch": "Chuquicamata",
     "salvador": "Salvador",
     "potrerillos": "Potrerillos",
     "potre": "Potrerillos",
@@ -38,20 +51,18 @@ KEYWORDS_DIVISION = {
     "teca": "Caletones",
     "tba": "TBA",
     "tbape": "TBA",
-    "san antonio": "San Antonio",
-    "sanantonio": "San Antonio",
     "chuquicamata": "Chuquicamata",
     "chuqui": "Chuquicamata",
-    "dch": "Chuquicamata",
     "radomiro": "Radomiro Tomic",
     "tomic": "Radomiro Tomic",
     "rt": "Radomiro Tomic",
-    "rt -": "Radomiro Tomic",
     "gabriela": "Gabriela Mistral",
     "mistral": "Gabriela Mistral",
     "ministro": "Ministro Hales",
     "hales": "Ministro Hales",
     "ventana": "Ventana",
+    "barquito": "Barquito",
+    "tas": "Barquito",
 }
 
 # Nota: Caletones, TBA y San Antonio usan el mismo Excel (hoja "Balance") con columnas diferentes
@@ -213,13 +224,17 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
         for division in df_completo["Division"].unique():
             df_div = df_completo[df_completo["Division"] == division].copy()
             
-            # Calcular totales
+            # Calcular totales simplificados
             inv_inicial = df_div[df_div["Concepto"].str.contains("inventario_inicial", na=False)]["Cantidad"].sum()
-            produccion = df_div[(df_div["Tipo Movimiento"].isin(["MPRO", "TIEB"])) & 
-                               (df_div["Movimiento"] == "I")]["Cantidad"].sum()
-            consumo = df_div[df_div["Tipo Movimiento"].isin(["ECIP", "VENT", "EDEV"])]["Cantidad"].sum()
-            tieb_egreso = df_div[(df_div["Tipo Movimiento"] == "TIEB") & (df_div["Movimiento"] == "E")]["Cantidad"].sum()
-            inv_final = inv_inicial + produccion - consumo - tieb_egreso
+            ingresos_total = df_div[df_div["Movimiento"] == "I"]["Cantidad"].sum()
+            egresos_total = df_div[df_div["Movimiento"] == "E"]["Cantidad"].sum()
+            inv_final_calculado = inv_inicial + ingresos_total - egresos_total
+            
+            # Extraer el inventario final del Excel
+            inv_final_extraido = df_div[df_div["Concepto"].str.contains("inventario_final", na=False)]["Cantidad"].sum()
+            
+            # Calcular diferencia
+            diferencia = inv_final_extraido - inv_final_calculado
             
             color = colores_division.get(division, "FFFFFF")
             
@@ -245,7 +260,7 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             cell_inv_ini_valor.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
             cell_inv_ini_valor.font = Font(bold=True)
             cell_inv_ini_valor.alignment = Alignment(horizontal="right")
-            cell_inv_ini_valor.number_format = '#,##0.00'
+            cell_inv_ini_valor.number_format = '#,##0.000'
             
             row_actual += 1
             
@@ -262,8 +277,8 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             # ===== DATOS DE MOVIMIENTOS =====
             df_batch = df_div[df_div["IncludeBatch"] == True].copy()
             
-            # Agrupar por concepto, sumando las cantidades (para rangos como K10:K13)
-            df_batch_agrupado = df_batch.groupby("Concepto", as_index=False).agg({
+            # Agrupar por "Grupo" (suma celdas con mismo grupo), sumando las cantidades
+            df_batch_agrupado = df_batch.groupby("Grupo", as_index=False).agg({
                 "Cantidad": "sum",
                 "Bodega": "first",
                 "Material": "first",
@@ -273,7 +288,7 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             }).copy()
             
             for idx, row in df_batch_agrupado.iterrows():
-                ws.cell(row=row_actual, column=1).value = row.get("Concepto", "")
+                ws.cell(row=row_actual, column=1).value = row.get("Grupo", "")
                 ws.cell(row=row_actual, column=2).value = row.get("Bodega", "")
                 ws.cell(row=row_actual, column=3).value = row.get("Material", "")
                 ws.cell(row=row_actual, column=4).value = "Ácido Sulfúrico (Conc: 96)"
@@ -288,7 +303,7 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
                     cell = ws.cell(row=row_actual, column=col)
                     cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
                     if col == 7:
-                        cell.number_format = '#,##0.00'
+                        cell.number_format = '#,##0.000'
                 
                 row_actual += 1
             
@@ -298,20 +313,55 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             cell_footer.value = ""
             cell_footer.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
             
+            # INV FINAL CALCULADO
             ws.merge_cells(f'J{row_actual}:K{row_actual}')
-            cell_inv_fin_label = ws[f'J{row_actual}']
-            cell_inv_fin_label.value = "INV FINAL"
-            cell_inv_fin_label.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
-            cell_inv_fin_label.font = Font(bold=True)
-            cell_inv_fin_label.alignment = Alignment(horizontal="right")
+            cell_inv_calc_label = ws[f'J{row_actual}']
+            cell_inv_calc_label.value = "INV FINAL (CALCULADO)"
+            cell_inv_calc_label.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
+            cell_inv_calc_label.font = Font(bold=True)
+            cell_inv_calc_label.alignment = Alignment(horizontal="right")
             
             ws.merge_cells(f'L{row_actual}:M{row_actual}')
-            cell_inv_fin_valor = ws[f'L{row_actual}']
-            cell_inv_fin_valor.value = inv_final
-            cell_inv_fin_valor.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
-            cell_inv_fin_valor.font = Font(bold=True)
-            cell_inv_fin_valor.alignment = Alignment(horizontal="right")
-            cell_inv_fin_valor.number_format = '#,##0.00'
+            cell_inv_calc_valor = ws[f'L{row_actual}']
+            cell_inv_calc_valor.value = inv_final_calculado
+            cell_inv_calc_valor.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
+            cell_inv_calc_valor.font = Font(bold=True)
+            cell_inv_calc_valor.alignment = Alignment(horizontal="right")
+            cell_inv_calc_valor.number_format = '#,##0.000'
+            
+            # INV FINAL EXTRAIDO
+            ws.merge_cells(f'N{row_actual}:O{row_actual}')
+            cell_inv_ext_label = ws[f'N{row_actual}']
+            cell_inv_ext_label.value = "INV FINAL (EXTRAÍDO)"
+            cell_inv_ext_label.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
+            cell_inv_ext_label.font = Font(bold=True)
+            cell_inv_ext_label.alignment = Alignment(horizontal="right")
+            
+            ws.merge_cells(f'P{row_actual}:Q{row_actual}')
+            cell_inv_ext_valor = ws[f'P{row_actual}']
+            cell_inv_ext_valor.value = inv_final_extraido
+            cell_inv_ext_valor.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
+            cell_inv_ext_valor.font = Font(bold=True)
+            cell_inv_ext_valor.alignment = Alignment(horizontal="right")
+            cell_inv_ext_valor.number_format = '#,##0.000'
+            
+            # DIFERENCIA
+            ws.merge_cells(f'R{row_actual}:S{row_actual}')
+            cell_dif_label = ws[f'R{row_actual}']
+            cell_dif_label.value = "DIFERENCIA"
+            cell_dif_label.fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
+            cell_dif_label.font = Font(bold=True)
+            cell_dif_label.alignment = Alignment(horizontal="right")
+            
+            ws.merge_cells(f'T{row_actual}:U{row_actual}')
+            cell_dif_valor = ws[f'T{row_actual}']
+            cell_dif_valor.value = diferencia
+            # Color rojo si hay diferencia, verde si cuadra
+            color_dif = "FF0000" if abs(diferencia) > 0.001 else "00B050"  # Rojo si diferencia, verde si cuadra
+            cell_dif_valor.fill = PatternFill(start_color=color_dif, end_color=color_dif, fill_type="solid")
+            cell_dif_valor.font = Font(bold=True, color="FFFFFF")
+            cell_dif_valor.alignment = Alignment(horizontal="right")
+            cell_dif_valor.number_format = '#,##0.000'
             
             row_actual += 3  # Espacio entre divisiones
         

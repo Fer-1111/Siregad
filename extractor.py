@@ -37,6 +37,7 @@ def extraer_movimientos(path_excel, config, fecha, division):
             registro = {
                 "Division": division,
                 "Concepto": concepto,
+                "Grupo": cfg.get("grupo", concepto),  # Usar grupo si existe, sino usar concepto
                 "Fecha": fecha,
                 "Cantidad": abs(float(valor)),  # Valor absoluto
                 "Unidad": "TN",
