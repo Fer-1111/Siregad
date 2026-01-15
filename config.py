@@ -532,17 +532,642 @@ CONFIG_DMH = {
 
 # BARQUITO
 CONFIG_BARQUITO = {
-    "nave_trade": {
+    # 🔹 Inventario inicial X5 (NO se carga al batch)
+    "inventario_inicial": {
         "sheet": "NOV 25",
-        "cell": "C37",
+        "cell": "X5",
         "tipo_mov": "CL",
         "movimiento": "I",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
-        "include_in_batch": True
+        "include_in_batch": False
     },
     
-    # 🔹 Ventas P41 (celda combinada PQRS41) → E VENT
+    # 🔹 Datos independientes C6 a C36 → I CL (guardar como datos separados, no sumados)
+    "dato_c6": {
+        "sheet": "NOV 25",
+        "cell": "C6",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c7": {
+        "sheet": "NOV 25",
+        "cell": "C7",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c8": {
+        "sheet": "NOV 25",
+        "cell": "C8",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c9": {
+        "sheet": "NOV 25",
+        "cell": "C9",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c10": {
+        "sheet": "NOV 25",
+        "cell": "C10",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c11": {
+        "sheet": "NOV 25",
+        "cell": "C11",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c12": {
+        "sheet": "NOV 25",
+        "cell": "C12",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c13": {
+        "sheet": "NOV 25",
+        "cell": "C13",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c14": {
+        "sheet": "NOV 25",
+        "cell": "C14",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c15": {
+        "sheet": "NOV 25",
+        "cell": "C15",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c16": {
+        "sheet": "NOV 25",
+        "cell": "C16",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c17": {
+        "sheet": "NOV 25",
+        "cell": "C17",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c18": {
+        "sheet": "NOV 25",
+        "cell": "C18",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c19": {
+        "sheet": "NOV 25",
+        "cell": "C19",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c20": {
+        "sheet": "NOV 25",
+        "cell": "C20",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c21": {
+        "sheet": "NOV 25",
+        "cell": "C21",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c22": {
+        "sheet": "NOV 25",
+        "cell": "C22",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c23": {
+        "sheet": "NOV 25",
+        "cell": "C23",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c24": {
+        "sheet": "NOV 25",
+        "cell": "C24",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c25": {
+        "sheet": "NOV 25",
+        "cell": "C25",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c26": {
+        "sheet": "NOV 25",
+        "cell": "C26",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c27": {
+        "sheet": "NOV 25",
+        "cell": "C27",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c28": {
+        "sheet": "NOV 25",
+        "cell": "C28",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c29": {
+        "sheet": "NOV 25",
+        "cell": "C29",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c30": {
+        "sheet": "NOV 25",
+        "cell": "C30",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c31": {
+        "sheet": "NOV 25",
+        "cell": "C31",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c32": {
+        "sheet": "NOV 25",
+        "cell": "C32",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c33": {
+        "sheet": "NOV 25",
+        "cell": "C33",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c34": {
+        "sheet": "NOV 25",
+        "cell": "C34",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c35": {
+        "sheet": "NOV 25",
+        "cell": "C35",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    "dato_c36": {
+        "sheet": "NOV 25",
+        "cell": "C36",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_c"
+    },
+    
+    # 🔹 Datos independientes E6 a E36 → I CL (guardar con contenido, no sumados)
+    "dato_e6": {
+        "sheet": "NOV 25",
+        "cell": "E6",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e7": {
+        "sheet": "NOV 25",
+        "cell": "E7",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e8": {
+        "sheet": "NOV 25",
+        "cell": "E8",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e9": {
+        "sheet": "NOV 25",
+        "cell": "E9",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e10": {
+        "sheet": "NOV 25",
+        "cell": "E10",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e11": {
+        "sheet": "NOV 25",
+        "cell": "E11",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e12": {
+        "sheet": "NOV 25",
+        "cell": "E12",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e13": {
+        "sheet": "NOV 25",
+        "cell": "E13",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e14": {
+        "sheet": "NOV 25",
+        "cell": "E14",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e15": {
+        "sheet": "NOV 25",
+        "cell": "E15",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e16": {
+        "sheet": "NOV 25",
+        "cell": "E16",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e17": {
+        "sheet": "NOV 25",
+        "cell": "E17",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e18": {
+        "sheet": "NOV 25",
+        "cell": "E18",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e19": {
+        "sheet": "NOV 25",
+        "cell": "E19",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e20": {
+        "sheet": "NOV 25",
+        "cell": "E20",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e21": {
+        "sheet": "NOV 25",
+        "cell": "E21",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e22": {
+        "sheet": "NOV 25",
+        "cell": "E22",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e23": {
+        "sheet": "NOV 25",
+        "cell": "E23",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e24": {
+        "sheet": "NOV 25",
+        "cell": "E24",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e25": {
+        "sheet": "NOV 25",
+        "cell": "E25",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e26": {
+        "sheet": "NOV 25",
+        "cell": "E26",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e27": {
+        "sheet": "NOV 25",
+        "cell": "E27",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e28": {
+        "sheet": "NOV 25",
+        "cell": "E28",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e29": {
+        "sheet": "NOV 25",
+        "cell": "E29",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e30": {
+        "sheet": "NOV 25",
+        "cell": "E30",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e31": {
+        "sheet": "NOV 25",
+        "cell": "E31",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e32": {
+        "sheet": "NOV 25",
+        "cell": "E32",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e33": {
+        "sheet": "NOV 25",
+        "cell": "E33",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e34": {
+        "sheet": "NOV 25",
+        "cell": "E34",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e35": {
+        "sheet": "NOV 25",
+        "cell": "E35",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    "dato_e36": {
+        "sheet": "NOV 25",
+        "cell": "E36",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        "grupo": "datos_e"
+    },
+    
+    # 🔹 P41 → E VENT
     "vent_p41": {
         "sheet": "NOV 25",
         "cell": "P41",
@@ -552,7 +1177,8 @@ CONFIG_BARQUITO = {
         "material": "7664-93-9",
         "include_in_batch": True
     },
-    # 🔹 Ventas P42 (celda combinada PQRS42) → E VENT (NO SE SUMAN)
+    
+    # 🔹 P42 → E VENT
     "vent_p42": {
         "sheet": "NOV 25",
         "cell": "P42",
@@ -560,9 +1186,10 @@ CONFIG_BARQUITO = {
         "movimiento": "E",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
-        "include_in_batch": False  # NO SE SUMAN
+        "include_in_batch": True
     },
-    # 🔹 Transfer interno P43 (celda combinada PQRS43) → E TIEB
+    
+    # 🔹 P43 → E TIEB
     "tieb_p43": {
         "sheet": "NOV 25",
         "cell": "P43",
@@ -573,667 +1200,26 @@ CONFIG_BARQUITO = {
         "include_in_batch": True
     },
     
-    # 🔹 CANJES - Despacho AA6 hasta AA36 (no se suman) → I CL
-    "canjes_despacho_aa6": {
-        "sheet": "NOV 25",
-        "cell": "AA6",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,  # NO SE SUMAN
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa7": {
-        "sheet": "NOV 25",
-        "cell": "AA7",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa8": {
-        "sheet": "NOV 25",
-        "cell": "AA8",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa9": {
-        "sheet": "NOV 25",
-        "cell": "AA9",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa10": {
-        "sheet": "NOV 25",
-        "cell": "AA10",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa11": {
-        "sheet": "NOV 25",
-        "cell": "AA11",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa12": {
-        "sheet": "NOV 25",
-        "cell": "AA12",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa13": {
-        "sheet": "NOV 25",
-        "cell": "AA13",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa14": {
-        "sheet": "NOV 25",
-        "cell": "AA14",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa15": {
-        "sheet": "NOV 25",
-        "cell": "AA15",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa16": {
-        "sheet": "NOV 25",
-        "cell": "AA16",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa17": {
-        "sheet": "NOV 25",
-        "cell": "AA17",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa18": {
-        "sheet": "NOV 25",
-        "cell": "AA18",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa19": {
-        "sheet": "NOV 25",
-        "cell": "AA19",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa20": {
-        "sheet": "NOV 25",
-        "cell": "AA20",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa21": {
-        "sheet": "NOV 25",
-        "cell": "AA21",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa22": {
-        "sheet": "NOV 25",
-        "cell": "AA22",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa23": {
-        "sheet": "NOV 25",
-        "cell": "AA23",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa24": {
-        "sheet": "NOV 25",
-        "cell": "AA24",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa25": {
-        "sheet": "NOV 25",
-        "cell": "AA25",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa26": {
-        "sheet": "NOV 25",
-        "cell": "AA26",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa27": {
-        "sheet": "NOV 25",
-        "cell": "AA27",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa28": {
-        "sheet": "NOV 25",
-        "cell": "AA28",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa29": {
-        "sheet": "NOV 25",
-        "cell": "AA29",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa30": {
-        "sheet": "NOV 25",
-        "cell": "AA30",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa31": {
-        "sheet": "NOV 25",
-        "cell": "AA31",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa32": {
-        "sheet": "NOV 25",
-        "cell": "AA32",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa33": {
-        "sheet": "NOV 25",
-        "cell": "AA33",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa34": {
-        "sheet": "NOV 25",
-        "cell": "AA34",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa35": {
-        "sheet": "NOV 25",
-        "cell": "AA35",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    "canjes_despacho_aa36": {
-        "sheet": "NOV 25",
-        "cell": "AA36",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "canjes_despacho"
-    },
-    
-    # 🔹 CANJES - Recepción AB6 hasta AB36 (si no hay nada no se agrega) → I CL
-    "canjes_recepcion_ab6": {
-        "sheet": "NOV 25",
-        "cell": "AB6",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab7": {
-        "sheet": "NOV 25",
-        "cell": "AB7",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab8": {
-        "sheet": "NOV 25",
-        "cell": "AB8",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab9": {
-        "sheet": "NOV 25",
-        "cell": "AB9",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab10": {
-        "sheet": "NOV 25",
-        "cell": "AB10",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab11": {
-        "sheet": "NOV 25",
-        "cell": "AB11",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab12": {
-        "sheet": "NOV 25",
-        "cell": "AB12",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab13": {
-        "sheet": "NOV 25",
-        "cell": "AB13",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab14": {
-        "sheet": "NOV 25",
-        "cell": "AB14",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab15": {
-        "sheet": "NOV 25",
-        "cell": "AB15",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab16": {
-        "sheet": "NOV 25",
-        "cell": "AB16",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab17": {
-        "sheet": "NOV 25",
-        "cell": "AB17",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab18": {
-        "sheet": "NOV 25",
-        "cell": "AB18",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab19": {
-        "sheet": "NOV 25",
-        "cell": "AB19",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab20": {
-        "sheet": "NOV 25",
-        "cell": "AB20",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab21": {
-        "sheet": "NOV 25",
-        "cell": "AB21",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab22": {
-        "sheet": "NOV 25",
-        "cell": "AB22",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab23": {
-        "sheet": "NOV 25",
-        "cell": "AB23",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab24": {
-        "sheet": "NOV 25",
-        "cell": "AB24",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab25": {
-        "sheet": "NOV 25",
-        "cell": "AB25",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab26": {
-        "sheet": "NOV 25",
-        "cell": "AB26",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab27": {
-        "sheet": "NOV 25",
-        "cell": "AB27",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab28": {
-        "sheet": "NOV 25",
-        "cell": "AB28",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab29": {
-        "sheet": "NOV 25",
-        "cell": "AB29",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab30": {
-        "sheet": "NOV 25",
-        "cell": "AB30",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab31": {
-        "sheet": "NOV 25",
-        "cell": "AB31",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab32": {
-        "sheet": "NOV 25",
-        "cell": "AB32",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab33": {
-        "sheet": "NOV 25",
-        "cell": "AB33",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab34": {
-        "sheet": "NOV 25",
-        "cell": "AB34",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab35": {
-        "sheet": "NOV 25",
-        "cell": "AB35",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    "canjes_recepcion_ab36": {
-        "sheet": "NOV 25",
-        "cell": "AB36",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "canjes_recepcion"
-    },
-    
-    # 🔹 Recepción Z41 y AA41 → I CL
+    # 🔹 Z41 → I TIPB (si no hay valor, guardar 0,000)
     "recepcion_z41": {
         "sheet": "NOV 25",
         "cell": "Z41",
-        "tipo_mov": "CL",
+        "tipo_mov": "TIPB",
         "movimiento": "I",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
-        "include_in_batch": True
-    },
-    "recepcion_aa41": {
-        "sheet": "NOV 25",
-        "cell": "AA41",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True
+        "include_in_batch": True,
+        "default_value": "0,000"
     },
     
-    # 🔹 Codelco Z42 y AA42 → I CL (actualmente en 0, pero configurados)
-    "codelco_z42": {
+    # 🔹 Inventario final AN 14 (NO se carga al batch)
+    "inventario_final": {
         "sheet": "NOV 25",
-        "cell": "Z42",
+        "cell": "AN14",
         "tipo_mov": "CL",
-        "movimiento": "I",
+        "movimiento": "",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
-        "include_in_batch": True
-    },
-    "codelco_aa42": {
-        "sheet": "NOV 25",
-        "cell": "AA42",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True
+        "include_in_batch": False
     }
 }
