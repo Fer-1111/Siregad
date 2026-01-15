@@ -1223,3 +1223,39 @@ CONFIG_BARQUITO = {
         "include_in_batch": False
     }
 }
+
+# DGM - GABRIELA MISTRAL
+CONFIG_DGM = {
+    # 🔹 Inventario inicial (se obtendrá de otro Excel, por ahora placeholder)
+    "inventario_inicial": {
+        "sheet": "Balance",
+        "cell": "A1",  # Placeholder - se actualizará cuando se proporcione el Excel
+        "tipo_mov": "MPRO",
+        "movimiento": "I",
+        "bodega": "DGM",
+        "material": "7664-93-9",
+        "include_in_batch": False
+    },
+    
+    # 🔹 E41 → I TIPB (Recepción)
+    "recepcion_e41": {
+        "sheet": "Balance",
+        "cell": "E41",
+        "tipo_mov": "TIPB",
+        "movimiento": "I",
+        "bodega": "DGM",
+        "material": "7664-93-9",
+        "include_in_batch": True
+    },
+    
+    # 🔹 J41 → E ECIP (Consumo interno)
+    "consumo_j41": {
+        "sheet": "Balance",
+        "cell": "J41",
+        "tipo_mov": "ECIP",
+        "movimiento": "E",
+        "bodega": "DGM",
+        "material": "7664-93-9",
+        "include_in_batch": True
+    }
+}

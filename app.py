@@ -7,10 +7,11 @@ import pandas as pd
 from batch_writer import escribir_batch
 # Barquito es opcional: si el archivo de config está desactualizado, evitamos que la app falle
 try:
-    from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA, CONFIG_DMH, CONFIG_BARQUITO
+    from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA, CONFIG_DMH, CONFIG_BARQUITO, CONFIG_DGM
 except ImportError:
     from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA, CONFIG_DMH
     CONFIG_BARQUITO = {}
+    CONFIG_DGM = {}
 from extractor import extraer_movimientos, extraer_siregad
 from validator import validar_inventario
 
@@ -32,6 +33,7 @@ DIVISIONES_CONFIG = {
     "Chuquicamata": CONFIG_CHUQUICAMATA,
     "Ministro Hales": CONFIG_DMH,
     "Barquito": CONFIG_BARQUITO,
+    "Gabriela Mistral": CONFIG_DGM,
 }
 
 # Mapeo de palabras clave para detectar división en nombre de archivo
@@ -40,6 +42,7 @@ KEYWORDS_DIVISION = {
     "san antonio": "San Antonio",    # Más específico
     "sanantonio": "San Antonio",
     "rt -": "Radomiro Tomic",        # Más específico que solo "rt"
+    "dgm": "Gabriela Mistral",       # DGM = Gabriela Mistral
     "dmh": "Ministro Hales",         # Antes de "dch" para evitar conflictos
     "dch": "Chuquicamata",
     "salvador": "Salvador",
@@ -98,6 +101,8 @@ with st.expander("ℹ️ Convención de nombres de archivos", expanded=False):
     - `Gabriela` o `Mistral` → División Gabriela Mistral
     - `Ministro` o `Hales` → División Ministro Hales
     - `Ventana` → División Ventana
+    - `Barquito` o `TAS` → División Barquito
+    - `DGM` → División Gabriela Mistral
     """)
 
 # Cargar múltiples archivos a la vez
