@@ -864,7 +864,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e7": {
         "sheet": "NOV 25",
@@ -874,7 +874,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e8": {
         "sheet": "NOV 25",
@@ -884,7 +884,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e9": {
         "sheet": "NOV 25",
@@ -894,7 +894,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e10": {
         "sheet": "NOV 25",
@@ -904,7 +904,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e11": {
         "sheet": "NOV 25",
@@ -914,7 +914,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e12": {
         "sheet": "NOV 25",
@@ -924,7 +924,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e13": {
         "sheet": "NOV 25",
@@ -934,7 +934,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e14": {
         "sheet": "NOV 25",
@@ -944,7 +944,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e15": {
         "sheet": "NOV 25",
@@ -954,7 +954,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e16": {
         "sheet": "NOV 25",
@@ -964,7 +964,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e17": {
         "sheet": "NOV 25",
@@ -974,7 +974,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e18": {
         "sheet": "NOV 25",
@@ -984,7 +984,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e19": {
         "sheet": "NOV 25",
@@ -994,7 +994,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e20": {
         "sheet": "NOV 25",
@@ -1004,7 +1004,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e21": {
         "sheet": "NOV 25",
@@ -1014,7 +1014,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e22": {
         "sheet": "NOV 25",
@@ -1024,7 +1024,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e23": {
         "sheet": "NOV 25",
@@ -1034,7 +1034,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e24": {
         "sheet": "NOV 25",
@@ -1044,7 +1044,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e25": {
         "sheet": "NOV 25",
@@ -1054,7 +1054,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e26": {
         "sheet": "NOV 25",
@@ -1064,7 +1064,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e27": {
         "sheet": "NOV 25",
@@ -1074,7 +1074,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e28": {
         "sheet": "NOV 25",
@@ -1084,7 +1084,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e29": {
         "sheet": "NOV 25",
@@ -1094,7 +1094,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e30": {
         "sheet": "NOV 25",
@@ -1104,7 +1104,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e31": {
         "sheet": "NOV 25",
@@ -1114,7 +1114,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e32": {
         "sheet": "NOV 25",
@@ -1124,7 +1124,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e33": {
         "sheet": "NOV 25",
@@ -1134,7 +1134,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e34": {
         "sheet": "NOV 25",
@@ -1144,7 +1144,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e35": {
         "sheet": "NOV 25",
@@ -1154,7 +1154,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     "dato_e36": {
         "sheet": "NOV 25",
@@ -1164,7 +1164,7 @@ CONFIG_BARQUITO = {
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "datos_e"
+        
     },
     
     # 🔹 P41 → E VENT
