@@ -364,18 +364,75 @@ CONFIG_VENT = {
 }
 
 # ============================================================================
-# HOJA "MEJICL" / "Mej ICL" - Mejillones Interacid
+# HOJA "MEJICL" - Mejillones Interacid
 # ============================================================================
 CONFIG_MEJICL = {
     "sheet": "MEJICL",
-    "columnas": COLUMNA_MES_C_START,
+    "columnas": COLUMNA_MES_D_START,  # D=ENE hasta O=DIC, P=TOTAL
     "secciones": {
-        "Mejillones_ICL": {
-            "inventario_inicial": 5, "traspasos_codelco": 7,
-            "compras": 14, "de_canjes": 21, "total_compromisos": 34, "ventas": 36,
-        },
-        "Mejillones_ICL_2": {
-            "traspasos_salida": 4, "a_canjes": 12, "saldo_mes": 30, "ajuste": 33,
+        "Mejillones_Interacid": {
+            "inventario_inicial": 7,
+            # Traspasos Codelco (fila 9 es título)
+            "traspasos_codelco": 9,
+            "traspaso_desde_chuquicamata": 10,
+            "traspaso_desde_salvador": 11,
+            "traspaso_desde_ventanas": 12,
+            "traspaso_desde_teniente": 13,
+            # Compras (fila 15 es título)
+            "compras": 15,
+            "compras_hexagon_ZU5K202_CL5K206": 16,
+            "compras_transsud_CL4K211": 17,
+            "compras_tricon_ZU5K204_CL5K205": 18,
+            "compras_sas_ZU5K203_CL5K201": 19,
+            # De Canjes Recepción (fila 40 es título)
+            "de_canjes_recepcion": 40,
+            "canjes_mantoverde_ZR5K402": 41,
+            "canjes_transsud_ZR4K311": 42,
+            "canjes_interacid_ZR5K416": 43,
+            "canjes_bhp_ZR5K415": 44,
+            "canjes_interacid_ZR5K417": 45,
+            "canjes_sas_ZR5K418": 46,
+            "canjes_mantoverde_ZR4K302": 47,
+            "canjes_bhp_ZR5K419": 48,
+            "canjes_interacid_ZR5K421": 49,
+            "canjes_interacid_ZR5K422": 50,
+            "canjes_hexagon_ZR5K425": 51,
+            "canjes_interacid_ZR5K427": 52,
+            "total_compromisos": 62,
+            # Ventas (fila 64 es título)
+            "ventas": 64,
+            "ventas_proquiel_CL5K412": 65,
+            "ventas_ameropa_CL5K424": 66,
+            "ventas_prm_CL5K406": 68,
+            # Traspasos (fila 87 es título)
+            "traspasos": 87,
+            "traspaso_a_terquim": 88,
+            "traspaso_a_rt": 89,
+            "traspaso_a_dgm": 90,
+            "traspaso_a_dch": 91,
+            "traspaso_a_dsal": 92,
+            "traspaso_a_dmh": 93,
+            # A Canjes-Devoluciones (fila 95 es título)
+            "a_canjes_devoluciones": 95,
+            "canje_dev_sas_ZO5K409": 96,
+            "canje_dev_mantoverde": 97,
+            "canje_dev_interacid_ZO5K416": 98,
+            "canje_dev_bhp_ZO5K415": 99,
+            "canje_dev_interacid_ZO5K417": 100,
+            "canje_dev_sas_ZO5K418": 101,
+            "canje_dev_bhp_ZO5K419": 102,
+            "canje_dev_interacid_ZO5K421": 103,
+            "canje_dev_interacid_ZO5K422": 104,
+            "canje_dev_hexagon_ZO5K425": 105,
+            "canje_dev_interacid_ZO5K427": 106,
+            # Saldos
+            "saldo_mes": 118,
+            "diferencia_medicion_naves": 120,
+            "diferencia_inventario_fisico": 121,
+            "ajustes_disponibilidades": 122,
+            "saldo_mes_ajustado": 124,
+            "saldo_por_asignar": 126,
+            "saldo_acumulado": 128,
         },
     }
 }
@@ -469,27 +526,66 @@ CONFIG_MEJ = {
 }
 
 # ============================================================================
-# HOJA "TERMEJ" / "Terquim Mej" - Terquim Mejillones
+# HOJA "TERMEJ" - Terquim Mejillones
 # ============================================================================
 CONFIG_TERMEJ = {
     "sheet": "TERMEJ",
-    "columnas": COLUMNA_MES_D_START,
+    "columnas": COLUMNA_MES_D_START,  # D=ENE hasta O=DIC, P=TOTAL
     "secciones": {
         "Terquim_Mejillones": {
             "inventario_inicial": 7,
-            "Traspasos Codelco": 9,
-        "Desde Chuquicamata": 10,
-        "Desde El Salvador": 11,
-        "Desde Las Ventanas": 12,
-        "Desde ITC": 13,
-        "Desde TPM": 14,
-        "Desde El Teniente": 15,
-        "compras": 17,
-            "total_compromisos": 54, "ventas": 56,
-            "traspasos": 60, "canjes_devoluciones": 66,
-        },
-        "Terquim_Mejillones_2": {
-            "saldo_mes": 80, "ajuste": 83,
+            # Traspasos Codelco (fila 9 es título)
+            "traspasos_codelco": 9,
+            "traspaso_desde_chuquicamata": 10,
+            "traspaso_desde_salvador": 11,
+            "traspaso_desde_ventanas": 12,
+            "traspaso_desde_itc": 13,
+            "traspaso_desde_tpm": 14,
+            "traspaso_desde_teniente": 15,
+            # Compras (fila 17 es título)
+            "compras": 17,
+            "compras_transsud": 18,
+            "compras_jxnmn_ZU5K205": 19,
+            "compras_ameropa_ZU5K201": 20,
+            "compras_transsud_CL4K211": 21,
+            "compras_hexagon_ZU5K202_CL5K206": 22,
+            "compras_tricon_CL4K210": 23,
+            "compras_sas_ZU5K203_CL5K201": 24,
+            # De Canjes Recepción (fila 36 es título)
+            "de_canjes_recepcion": 36,
+            "canjes_sas_ZR5K409": 37,
+            "canjes_mantucoya_ZR5K406": 38,
+            "canjes_mantoverde_ZR5K402": 39,
+            "canjes_sas_ZR5K412": 40,
+            "canjes_sas_ZR5K418": 41,
+            "total_compromisos": 54,
+            # Ventas (fila 56 es título)
+            "ventas": 56,
+            "ventas_ameropa_CL5K424": 57,
+            "ventas_proquiel_CL5K412": 58,
+            "ventas_ameropa_CL5K430": 59,
+            # Traspasos (fila 72 es título)
+            "traspasos": 72,
+            "traspaso_a_rt": 73,
+            "traspaso_a_dgm": 74,
+            "traspaso_a_dch": 75,
+            "traspaso_a_dsal": 76,
+            "traspaso_a_dmh": 77,
+            # Canjes-Devoluciones (fila 79 es título)
+            "canjes_devoluciones": 79,
+            "canje_dev_mantucoya_ZO5K406": 80,
+            "canje_dev_sas_ZO5K409": 81,
+            "canje_dev_sas_ZO5K412": 82,
+            "canje_dev_sas_ZO5K418": 83,
+            "canje_dev_mantoverde": 84,
+            # Saldos
+            "saldo_mes": 102,
+            "diferencia_medicion_naves": 104,
+            "diferencia_inventario_fisico": 105,
+            "ajustes_disponibilidades": 106,
+            "saldo_mes_ajustado": 108,
+            "saldo_por_asignar": 110,
+            "saldo_acumulado": 112,
         },
     }
 }
@@ -505,6 +601,57 @@ CONFIG_CANJES = {
     },
     "clientes": {
         "Mantoverde": {"prog_mejillones": 4, "retiros": 8, "prog_barquito": 20, "retiros_barquito": 24},
+    }
+}
+
+# ============================================================================
+# HOJA "COMPRAS" - Compras consolidadas
+# ============================================================================
+CONFIG_COMPRAS = {
+    "sheet": "COMPRAS",
+    "columnas": COLUMNA_MES_D_START,  # D=ENE hasta O=DIC, P=TOTAL
+    "secciones": {
+        "Compras": {
+            # Compras (fila 7 es título)
+            "compras": 7,
+            "compras_molyb_CL5K200": 8,
+            "compras_altonorte_lt_tpm_CL5K203": 9,
+            "compras_altonorte_lt_an_CL5K203": 10,
+            "compras_altonorte_2_tpm_CL5K202": 11,
+            "compras_altonorte_2_an_CL5K202": 12,
+            "compras_sas_ZU5K203_CL5K201": 13,
+            "compras_transsud_CL5K204": 14,
+            "compras_tricon_ZU5K204_CL5K205": 15,
+            "compras_hexagon_ZU5K202_CL5K206": 16,
+            "compras_interacid_CL5K209": 17,
+            "compras_jxnmn_ZU5K205": 18,
+            "compras_ameropa_ZU5K201": 19,
+            "compras_transsud_CL5K208": 20,
+            "compras_transsud_CL5K207": 21,
+            "compras_tricon_CL4K210": 22,
+            "compras_transsud_CL4K211": 23,
+            "compras_transsud_CL4K209": 24,
+            "compras_interacid_fca_CL4K205A": 25,
+            "compras_glencore_altonorte_CL4K203A": 26,
+            # Ventas (fila 40 es título)
+            "ventas": 40,
+            "ventas_elabra": 42,
+            # Puerto Destino (fila 45 es título)
+            "puerto_destino": 45,
+            "destino_molyb": 46,
+            "destino_mejillones_puerto": 47,
+            "destino_mejillones_icl": 48,
+            "destino_barquito": 49,
+            "destino_altonorte": 50,
+            "destino_terquim_mejillones": 51,
+            # A Canjes
+            "a_canjes": 53,
+            # Saldos
+            "ajustes_disponibilidades": 59,
+            "saldo_mensual_ajustado": 61,
+            "saldo_por_asignar": 63,
+            "saldo_acumulado": 65,
+        },
     }
 }
 
