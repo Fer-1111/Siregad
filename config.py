@@ -1,5 +1,90 @@
 # config.py
 
+# Diccionario de RUT y nombres de empresas para movimientos con factura
+RUT_EMPRESAS = {
+    "61.704.000-K": "Corporación Nacional del Cobre de Chile (Codelco)",
+    "93.458.000-1": "CELULOSA ARAUCO Y CONSTITUCION",
+    "96.595.400-7": "MINERA VALLE CENTRAL S.A.",
+    "78.572.860-2": "QUIMICA DEL SUR Y CIA. LTDA.",
+    "76.257.082-3": "Quimicos FAS Spa",
+    "78.887.880-K": "ECOKORP LTDA.",
+    "76.107.905-0": "MOLYMETNOS S.A.",
+    "96.959.620-2": "REDOXI WATER S. A.",
+    "79.559.670-4": "PROQUIEL QUIMICOS LIMITADA",
+    "87.001.500-3": "QUIMETAL INDUSTRIAL S.A.",
+    "78.200.830-7": "Minera Cemin Pullalli SPA",
+    "77.737.403-6": "Compañía Minera Tres Valles SpA",
+    "77.020.457-7": "Mantoverde S.A.",
+    "61.703.000-4": "EMPRESA NACIONAL DE MINERIA",
+    "77.867.520-K": "COMERCIAL TRANS SUD LIMITADA",
+    "96.701.340-4": "SOC. CONTRACTUAL MINERA EL ABRA",
+    "76.255.054-7": "PLANTA RECUPERADORA DE METALES SpA.",
+    "77.844.523-9": "AMEROPA MARKETING CHILE SPA",
+    "76.079.669-7": "Minera Antucoya",
+    "78.378.860-8": "INTERACID TRADING (CHILE) S.A.",
+    "76.148.338-2": "Sociedad de Procesamiento de Molibdeno Ltda.",
+    "76.821.240-6": "GLENCORE CHILE SPA",
+    "ZU5K202": "HEXAGON",
+    "77.382.103-8": "HEXAGON CHILE SPA",
+}
+
+# Diccionario completo de clientes con RUT (para futuro uso)
+RUT_CLIENTES = {
+    # Clientes nacionales
+    "78.378.860-8": "INTERACID TRADING (CHILE) S.A.",
+    "77.382.103-8": "HEXAGON CHILE SPA",
+    "76.148.338-2": "Sociedad de Procesamiento de Molibdeno Ltda.",
+    "77.020.457-7": "Mantoverde S.A.",
+    "77.867.520-K": "COMERCIAL TRANS SUD LIMITADA",
+    "96.701.340-4": "SOC. CONTRACTUAL MINERA EL ABRA",
+    "77.894.990-3": "ORAFTI CHILE S.A.",
+    "76.255.054-7": "PLANTA RECUPERADORA DE METALES SpA.",
+    "76.257.082-3": "Quimicos FAS Spa",
+    "78.887.880-K": "ECOKORP LTDA.",
+    "87.550.600-5": "VINICAS S.A.",
+    "79.559.670-4": "PROQUIEL QUIMICOS LIMITADA",
+    "93.628.000-5": "MOLIBDENOS Y METALES S.A.",
+    "96.510.970-6": "MADERAS ARAUCO S.A.",
+    "96.595.400-7": "MINERA VALLE CENTRAL S.A.",
+    "78.572.860-2": "QUIMICA DEL SUR Y CIA. LTDA.",
+    "99.531.960-8": "SCM MINERA LUMINA COPPER CHILE",
+    "93.458.000-1": "CELULOSA ARAUCO Y CONSTITUCION",
+    "96.532.330-9": "CMPC PULP SpA",
+    "96.731.890-6": "Cartulinas CMPC Spa.",
+    "76.051.610-4": "SOCIEDAD CONTRACTUAL MINERA FRANKE",
+    "96.790.240-3": "MINERA PELAMBRES",
+    "61.703.000-4": "EMPRESA NACIONAL DE MINERIA",
+    "76.066.160-0": "Sociedad Comercial y Minera",
+    "77.950.280-5": "BHP BILLITON CHILE INVERSIONES LTDA",
+    "76.858.530-K": "NORACID S.A.",
+    "76.821.240-6": "GLENCORE CHILE SPA",
+    "96.959.620-2": "REDOXI WATER S. A.",
+    "76.455.066-8": "SA SERVICES CHILE SPA",
+    "76.107.905-0": "MOLYMETNOS S.A.",
+    "78.200.830-7": "Minera Cemin Pullalli SPA",
+    "88.325.800-2": "Complejo Metalúrgico Altonorte S.A.",
+    "77.762.940-9": "Anglo American Sur S. A.",
+    "77.539.056-5": "COMERCIALIZADORA TRICON DRY CHEMICA",
+    "76.079.669-7": "MINERA ANTUCOYA",
+    "87.001.500-3": "QUIMETAL INDUSTRIAL S.A.",
+    "77.844.523-9": "AMEROPA MARKETING CHILE SPA",
+    "77.737.403-6": "Compañía Minera Tres Valles SpA",
+    "61.704.000-K": "Corporación Nacional del Cobre de Chile (Codelco)",
+    # Clientes internacionales (con código ZU)
+    "BO1K302": "Sociedad Industrial Tierra S.A.",
+    "ZU3K207": "SAS",
+    "ZU5K202": "Hexagon",
+    "ZU2K211": "TRAMMO",
+    "ZU3K214": "AMEROPA",
+    "ZU5K204": "TRICON",
+    "ZU3K212": "GLENCORE INTERNATIONAL",
+    "ZU5K205": "PAN PACIFIC COPPER CO.LTD",
+    "ZU5K401": "GLENCORE INTERNATIONAL AG",
+}
+
+# Diccionario inverso: nombre -> RUT
+NOMBRE_A_RUT = {v: k for k, v in RUT_CLIENTES.items()}
+
 CONFIG_POTRERILLOS = {
     "inventario_inicial": {
         "sheet": "Noviembre 2025",
@@ -390,7 +475,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "F27",
         "tipo_mov": "MPRO",
         "movimiento": "I",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": False
     },
@@ -399,7 +484,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "F18",
         "tipo_mov": "MPRO",
         "movimiento": "I",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -408,7 +493,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K15",
         "tipo_mov": "TIEB",
         "movimiento": "E",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -417,7 +502,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K17",
         "tipo_mov": "ECIP",
         "movimiento": "E",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -426,7 +511,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K10",
         "tipo_mov": "ECIP",
         "movimiento": "E",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True,
         "grupo": "salida_ecip"
@@ -436,7 +521,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K11",
         "tipo_mov": "ECIP",
         "movimiento": "E",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True,
         "grupo": "salida_ecip"
@@ -446,7 +531,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K12",
         "tipo_mov": "ECIP",
         "movimiento": "E",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True,
         "grupo": "salida_ecip"
@@ -456,7 +541,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K13",
         "tipo_mov": "ECIP",
         "movimiento": "E",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": True,
         "grupo": "salida_ecip"
@@ -466,7 +551,7 @@ CONFIG_CHUQUICAMATA = {
         "cell": "K27",
         "tipo_mov": "MPRO",
         "movimiento": "F",
-        "bodega": "RT",
+        "bodega": "CH",
         "material": "7664-93-9",
         "include_in_batch": False
     }
@@ -479,7 +564,7 @@ CONFIG_DMH = {
         "cell": "O35",
         "tipo_mov": "MPRO",
         "movimiento": "I",
-        "bodega": "DMH",
+        "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": False
     },
@@ -488,7 +573,7 @@ CONFIG_DMH = {
         "cell": "D35",
         "tipo_mov": "MPRO",
         "movimiento": "I",
-        "bodega": "DMH",
+        "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -497,7 +582,7 @@ CONFIG_DMH = {
         "cell": "F35",
         "tipo_mov": "TIEB",
         "movimiento": "E",
-        "bodega": "DMH",
+        "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -506,7 +591,7 @@ CONFIG_DMH = {
         "cell": "H35",
         "tipo_mov": "TIEB",
         "movimiento": "E",
-        "bodega": "DMH",
+        "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -515,7 +600,7 @@ CONFIG_DMH = {
         "cell": "L35",
         "tipo_mov": "TIEB",
         "movimiento": "E",
-        "bodega": "DMH",
+        "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -524,7 +609,7 @@ CONFIG_DMH = {
         "cell": "P35",
         "tipo_mov": "MPRO",
         "movimiento": "F",
-        "bodega": "DMH",
+        "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": False
     }
@@ -1228,7 +1313,7 @@ CONFIG_BARQUITO = {
 CONFIG_DGM = {
     # 🔹 Inventario inicial (se obtendrá de otro Excel, por ahora placeholder)
     "inventario_inicial": {
-        "sheet": "Balance",
+        "sheet": "Acido ",
         "cell": "A1",  # Placeholder - se actualizará cuando se proporcione el Excel
         "tipo_mov": "MPRO",
         "movimiento": "I",
@@ -1239,7 +1324,7 @@ CONFIG_DGM = {
     
     # 🔹 E41 → I TIPB (Recepción)
     "recepcion_e41": {
-        "sheet": "Balance",
+        "sheet": "Acido ",
         "cell": "E41",
         "tipo_mov": "TIPB",
         "movimiento": "I",
@@ -1250,7 +1335,7 @@ CONFIG_DGM = {
     
     # 🔹 J41 → E ECIP (Consumo interno)
     "consumo_j41": {
-        "sheet": "Balance",
+        "sheet": "Acido ",
         "cell": "J41",
         "tipo_mov": "ECIP",
         "movimiento": "E",

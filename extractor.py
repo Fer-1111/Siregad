@@ -11,10 +11,22 @@ def extraer_movimientos(path_excel, config, fecha, division):
         path_excel.seek(0)
 
     wb = load_workbook(path_excel, data_only=True)
+    
+    # Debug: mostrar hojas disponibles
+    hojas_disponibles = wb.sheetnames
+    print(f"[DEBUG] División: {division}")
+    print(f"[DEBUG] Hojas disponibles: {hojas_disponibles}")
 
     for concepto, cfg in config.items():
         try:
-            ws = wb[cfg["sheet"]]
+            hoja_requerida = cfg["sheet"]
+            
+            # Verificar si la hoja existe
+            if hoja_requerida not in hojas_disponibles:
+                print(f"[DEBUG] ERROR: La hoja '{hoja_requerida}' NO existe!")
+                raise Exception(f"La hoja '{hoja_requerida}' no existe. Hojas disponibles: {hojas_disponibles}")
+            
+            ws = wb[hoja_requerida]
             
             # Detectar si es un rango (ej: K10:K13) o una celda simple
             celda = cfg["cell"]
@@ -29,9 +41,16 @@ def extraer_movimientos(path_excel, config, fecha, division):
             else:
                 # Es una celda simple
                 valor = ws[celda].value
+            
+            print(f"[DEBUG] {concepto}: celda {celda} = {valor}")
 
+            # Saltar si el valor es None o 0 (pero NO para inventarios)
             if valor is None or valor == 0:
-                continue
+                # Siempre incluir inventario_inicial e inventario_final aunque sea 0
+                if "inventario" not in concepto:
+                    continue
+                else:
+                    valor = 0  # Forzar 0 para inventarios
 
             # Guardar todo en registro intermedio
             registro = {
@@ -63,7 +82,9 @@ def extraer_movimientos(path_excel, config, fecha, division):
 
             registros.append(registro)
         except Exception as e:
-            raise Exception(f"Error en concepto '{concepto}': {str(e)}")
+            raise Exception(f"Error en concepto '{concepto}' (hoja: {cfg.get('sheet')}, celda: {cfg.get('cell')}): {str(e)}")
+
+    return pd.DataFrame(registros)
 
     return pd.DataFrame(registros)
 
