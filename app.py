@@ -267,6 +267,295 @@ if "facturas_importadas" in st.session_state and st.session_state.facturas_impor
         st.session_state.facturas_importadas = []
         st.rerun()
 
+# ===== NUEVO: EXTRACTOR DE PROGRAMACIÓN POR DIVISIÓN =====
+st.subheader("📊 Extractor de Programación AS 2025")
+
+with st.expander("📥 Extraer datos de Programación por División", expanded=True):
+    st.markdown("""
+    **Extrae los datos de la Programación AS 2025 organizados por:**
+    - 📈 **Producción** | 📉 **Consumo** | 🔧 **Ajuste** | 💰 **Venta** | ↗️ **A Canje** | 🛒 **Compras** | ↙️ **De Canje**
+    
+    📌 **Hojas disponibles:** SALV, TTE, DMH, CHU, VENT, MEJ, MEJICL, TERMEJ, COMPRAS
+    """)
+    
+    archivo_progra_extractor = st.file_uploader(
+        "Sube el Excel PROGRAMACIÓN AS 2025",
+        type=["xlsx"],
+        key="progra_extractor"
+    )
+    
+    col_mes_ext, col_div_ext = st.columns(2)
+    with col_mes_ext:
+        mes_extractor = st.selectbox(
+            "Mes a extraer",
+            ["noviembre", "octubre", "septiembre", "agosto", "julio", "junio", 
+             "mayo", "abril", "marzo", "febrero", "enero", "diciembre"],
+            key="mes_extractor"
+        )
+    with col_div_ext:
+        division_extractor = st.selectbox(
+            "División/Hoja a extraer",
+            ["TODAS", "SALV", "TTE", "DMH", "CHU", "VENT", "MEJ", "MEJICL", "TERMEJ", "COMPRAS"],
+            key="div_extractor"
+        )
+    
+    if archivo_progra_extractor and st.button("📊 Extraer Datos de Programación", key="btn_extractor"):
+        try:
+            import openpyxl
+            from config_programacion import (
+                COLUMNA_MES_D_START, CONFIG_SALV, CONFIG_TTE, CONFIG_DMH_PROGRA,
+                CONFIG_CHUQUI, CONFIG_VENT, CONFIG_MEJ, CONFIG_MEJICL, CONFIG_TERMEJ, CONFIG_COMPRAS
+            )
+            
+            wb_progra = openpyxl.load_workbook(archivo_progra_extractor, data_only=True)
+            hojas = wb_progra.sheetnames
+            st.write(f"📋 Hojas encontradas: {hojas}")
+            
+            # Columna para el mes seleccionado
+            col_mes = COLUMNA_MES_D_START.get(mes_extractor.lower(), 14)  # Default noviembre
+            
+            # Mapeo de configuraciones
+            CONFIGS = {
+                "SALV": CONFIG_SALV,
+                "TTE": CONFIG_TTE,
+                "DMH": CONFIG_DMH_PROGRA,
+                "CHU": CONFIG_CHUQUI,
+                "VENT": CONFIG_VENT,
+                "MEJ": CONFIG_MEJ,
+                "MEJICL": CONFIG_MEJICL,
+                "TERMEJ": CONFIG_TERMEJ,
+                "COMPRAS": CONFIG_COMPRAS,
+            }
+            
+            # Función para extraer valor de celda
+            def get_valor(ws, row, col):
+                val = ws.cell(row=row, column=col).value
+                if val is None:
+                    return 0.0
+                try:
+                    return float(val)
+                except:
+                    return 0.0
+            
+            # Función para categorizar los datos extraídos
+            def categorizar_datos(datos_seccion):
+                """Organiza los datos en categorías estándar"""
+                categorias = {
+                    "📈 Producción": {},
+                    "📉 Consumo": {},
+                    "🔧 Ajuste": {},
+                    "💰 Ventas": {},
+                    "↗️ A Canje": {},
+                    "🛒 Compras": {},
+                    "↙️ De Canje": {},
+                    "📦 Inventario": {},
+                    "🔄 Traspasos": {},
+                    "🚢 Embarques": {},
+                    "📊 Saldos": {},
+                }
+                
+                for key, valor in datos_seccion.items():
+                    if valor == 0:
+                        continue
+                    key_lower = key.lower()
+                    
+                    # Producción
+                    if "produccion" in key_lower or "excedente" in key_lower:
+                        categorias["📈 Producción"][key] = valor
+                    # Consumo
+                    elif "consumo" in key_lower:
+                        categorias["📉 Consumo"][key] = valor
+                    # Ajustes
+                    elif "ajuste" in key_lower or "diferencia" in key_lower:
+                        categorias["🔧 Ajuste"][key] = valor
+                    # Ventas
+                    elif "venta" in key_lower or key_lower.startswith("ventas_"):
+                        categorias["💰 Ventas"][key] = valor
+                    # A Canjes (devoluciones/salidas)
+                    elif "canjes_devoluciones" in key_lower or "a_canjes" in key_lower or "canje_dev" in key_lower:
+                        categorias["↗️ A Canje"][key] = valor
+                    # De Canjes (recepción/entradas)
+                    elif "de_canjes" in key_lower or "canjes_recepcion" in key_lower or "retornos_canjes" in key_lower or (key_lower.startswith("canjes_") and "_ZR" in key):
+                        categorias["↙️ De Canje"][key] = valor
+                    # Compras
+                    elif "compra" in key_lower:
+                        categorias["🛒 Compras"][key] = valor
+                    # Inventario
+                    elif "inventario" in key_lower or "saldo_inicial" in key_lower:
+                        categorias["📦 Inventario"][key] = valor
+                    # Traspasos
+                    elif "traspaso" in key_lower or "recepcion" in key_lower or "entregas" in key_lower:
+                        categorias["🔄 Traspasos"][key] = valor
+                    # Embarques
+                    elif "embarque" in key_lower or "exportacion" in key_lower:
+                        categorias["🚢 Embarques"][key] = valor
+                    # Saldos
+                    elif "saldo" in key_lower or "total" in key_lower:
+                        categorias["📊 Saldos"][key] = valor
+                    # Otros
+                    else:
+                        categorias["📊 Saldos"][key] = valor
+                
+                return categorias
+            
+            # Extraer datos según selección
+            hojas_a_procesar = [division_extractor] if division_extractor != "TODAS" else list(CONFIGS.keys())
+            
+            datos_extraidos = {}
+            
+            for hoja_key in hojas_a_procesar:
+                if hoja_key not in CONFIGS:
+                    continue
+                    
+                config = CONFIGS[hoja_key]
+                nombre_hoja = config.get("sheet", hoja_key)
+                
+                if nombre_hoja not in hojas:
+                    st.warning(f"⚠️ Hoja '{nombre_hoja}' no encontrada en el Excel")
+                    continue
+                
+                ws = wb_progra[nombre_hoja]
+                datos_hoja = {}
+                
+                # Extraer cada sección de la configuración
+                for seccion_nombre, filas in config.get("secciones", {}).items():
+                    datos_seccion = {}
+                    
+                    for concepto, fila in filas.items():
+                        if isinstance(fila, int):
+                            valor = get_valor(ws, fila, col_mes)
+                            if valor != 0:
+                                datos_seccion[concepto] = valor
+                    
+                    if datos_seccion:
+                        datos_hoja[seccion_nombre] = datos_seccion
+                
+                if datos_hoja:
+                    datos_extraidos[hoja_key] = datos_hoja
+            
+            wb_progra.close()
+            
+            # Guardar en session_state
+            st.session_state.datos_progra_extraidos = datos_extraidos
+            st.session_state.mes_progra_extraido = mes_extractor
+            
+            st.success(f"✅ Datos extraídos para {mes_extractor.upper()}")
+            
+            # Mostrar datos extraídos por división
+            for hoja_key, datos_hoja in datos_extraidos.items():
+                st.markdown(f"### 📁 {hoja_key}")
+                
+                for seccion, datos_seccion in datos_hoja.items():
+                    st.markdown(f"#### {seccion}")
+                    
+                    # Categorizar los datos
+                    categorias = categorizar_datos(datos_seccion)
+                    
+                    # Mostrar en columnas las categorías principales
+                    col1, col2, col3 = st.columns(3)
+                    
+                    with col1:
+                        # Producción
+                        if categorias["📈 Producción"]:
+                            st.markdown("**📈 Producción**")
+                            for k, v in categorias["📈 Producción"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                        
+                        # Consumo
+                        if categorias["📉 Consumo"]:
+                            st.markdown("**📉 Consumo**")
+                            for k, v in categorias["📉 Consumo"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                        
+                        # Ajustes
+                        if categorias["🔧 Ajuste"]:
+                            st.markdown("**🔧 Ajustes**")
+                            for k, v in categorias["🔧 Ajuste"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                    
+                    with col2:
+                        # Ventas
+                        if categorias["💰 Ventas"]:
+                            st.markdown("**💰 Ventas**")
+                            for k, v in categorias["💰 Ventas"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                        
+                        # Compras
+                        if categorias["🛒 Compras"]:
+                            st.markdown("**🛒 Compras**")
+                            for k, v in categorias["🛒 Compras"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                    
+                    with col3:
+                        # A Canjes
+                        if categorias["↗️ A Canje"]:
+                            st.markdown("**↗️ A Canje (Devoluciones)**")
+                            for k, v in categorias["↗️ A Canje"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                        
+                        # De Canjes
+                        if categorias["↙️ De Canje"]:
+                            st.markdown("**↙️ De Canje (Recepción)**")
+                            for k, v in categorias["↙️ De Canje"].items():
+                                st.write(f"- {k.replace('_', ' ').title()}: **{v:,.2f}** TN")
+                    
+                    # Mostrar traspasos, embarques y saldos en una tabla
+                    otros_datos = []
+                    for cat_nombre in ["📦 Inventario", "🔄 Traspasos", "🚢 Embarques", "📊 Saldos"]:
+                        for k, v in categorias[cat_nombre].items():
+                            otros_datos.append({
+                                "Categoría": cat_nombre,
+                                "Concepto": k.replace("_", " ").title(),
+                                "Valor (TN)": v
+                            })
+                    
+                    if otros_datos:
+                        with st.expander(f"📋 Otros datos ({len(otros_datos)} registros)"):
+                            df_otros = pd.DataFrame(otros_datos)
+                            st.dataframe(df_otros, use_container_width=True)
+                    
+                    st.divider()
+            
+            # Crear tabla resumen por división
+            st.markdown("### 📊 Resumen por División")
+            
+            resumen_divisiones = []
+            for hoja_key, datos_hoja in datos_extraidos.items():
+                for seccion, datos_seccion in datos_hoja.items():
+                    categorias = categorizar_datos(datos_seccion)
+                    
+                    resumen_divisiones.append({
+                        "División": hoja_key,
+                        "Sección": seccion,
+                        "Producción": sum(categorias["📈 Producción"].values()) or 0,
+                        "Consumo": sum(categorias["📉 Consumo"].values()) or 0,
+                        "Ajuste": sum(categorias["🔧 Ajuste"].values()) or 0,
+                        "Ventas": sum(categorias["💰 Ventas"].values()) or 0,
+                        "A Canje": sum(categorias["↗️ A Canje"].values()) or 0,
+                        "Compras": sum(categorias["🛒 Compras"].values()) or 0,
+                        "De Canje": sum(categorias["↙️ De Canje"].values()) or 0,
+                    })
+            
+            if resumen_divisiones:
+                df_resumen = pd.DataFrame(resumen_divisiones)
+                st.dataframe(df_resumen, use_container_width=True)
+                
+                # Descargar resumen como CSV
+                csv_resumen = df_resumen.to_csv(index=False).encode('utf-8')
+                st.download_button(
+                    label="📥 Descargar Resumen CSV",
+                    data=csv_resumen,
+                    file_name=f"progra_{mes_extractor}_resumen.csv",
+                    mime="text/csv",
+                )
+                
+        except Exception as e:
+            st.error(f"Error al extraer datos de Programación: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+
+st.divider()
+
 # ===== PASO 2.6: CUADRE CON PROGRAMACIÓN =====
 st.subheader("📊 Paso 2.6: Cuadre con Programación AS 2025")
 
