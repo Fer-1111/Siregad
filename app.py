@@ -12,7 +12,11 @@ except ImportError:
     from config import CONFIG_POTRERILLOS, CONFIG_CALETONES, CONFIG_TBA, CONFIG_SAN_ANTONIO, CONFIG_RT, CONFIG_CHUQUICAMATA, CONFIG_DMH
     CONFIG_BARQUITO = {}
     CONFIG_DGM = {}
-from config_programacion import COLUMNA_MES, MES_ALIAS, DIVISION_A_GRUPO_PROGRA, TOLERANCIA_DIFERENCIA
+from config_programacion import (
+    COLUMNA_MES_D_START, MES_ALIAS, DIVISION_A_GRUPO_PROGRA, TOLERANCIA_DIFERENCIA,
+    CONFIG_SALV, CONFIG_TTE, CONFIG_DMH_PROGRA, CONFIG_CHUQUI, CONFIG_VENT,
+    CONFIG_MEJ, CONFIG_MEJICL, CONFIG_TERMEJ, CONFIG_COMPRAS
+)
 from extractor import extraer_movimientos, extraer_siregad
 from validator import validar_inventario
 
@@ -86,7 +90,231 @@ fecha = st.date_input(
     value=date.today(),
 )
 
-st.subheader("📂 Paso 1: Cargar Balances de Divisiones")
+# Obtener mes y año de la fecha seleccionada
+mes_seleccionado = fecha.month
+anio_seleccionado = fecha.year
+MESES_NOMBRES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio",
+                 7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+st.info(f"📅 Procesando: **{MESES_NOMBRES[mes_seleccionado]} {anio_seleccionado}**")
+
+# ============================================================================
+# FASE 0: CARGAR ARCHIVO EXPORT (SOC) - FUENTE MAESTRA DE FACTURAS
+# ============================================================================
+st.subheader("📊 Fase 0: Cargar Archivo Export (SOC)")
+
+with st.expander("📤 Cargar facturas desde Export SOC", expanded=True):
+    st.markdown("""
+    **Este es el archivo maestro de facturas exportado desde SAP/SOC.**
+    
+    📌 **Columnas esperadas:**
+    - **Contrato Nuevo** (A): Código como CL5K402, ZO5K404, ZR5K311...
+    - **Fecha Real SM** (Q): Para filtrar por mes
+    - **Peso Neto**: Cantidad en TM
+    - **Almacén**: Origen/destino (Plta.Los Lirios, Bod.Ventanas, etc.)
+    - **Gl.Cliente**: Nombre del cliente
+    
+    📌 **Clasificación automática por prefijo:**
+    - **CL** = Venta Nacional → código VENT
+    - **ZO** = Canje salida (egreso)
+    - **ZR** = Canje entrada (ingreso)
+    """)
+    
+    archivo_export = st.file_uploader(
+        "Sube el archivo Export (SOC)",
+        type=["xlsx", "xls"],
+        key="export_soc"
+    )
+    
+    if archivo_export:
+        try:
+            # Leer el archivo
+            df_export = pd.read_excel(archivo_export)
+            
+            st.write(f"📋 Columnas encontradas: {list(df_export.columns)}")
+            st.write(f"📊 Total registros: {len(df_export)}")
+            
+            # Detectar columna de fecha (buscar "Fecha Real SM" o columna Q)
+            col_fecha = None
+            for col in df_export.columns:
+                if "fecha" in col.lower() and "real" in col.lower():
+                    col_fecha = col
+                    break
+            
+            if col_fecha is None and len(df_export.columns) >= 17:
+                col_fecha = df_export.columns[16]  # Columna Q (índice 16)
+                st.info(f"Usando columna '{col_fecha}' como fecha")
+            
+            # Detectar columna de contrato
+            col_contrato = None
+            for col in df_export.columns:
+                if "contrato" in col.lower():
+                    col_contrato = col
+                    break
+            if col_contrato is None:
+                col_contrato = df_export.columns[0]  # Primera columna
+            
+            # Detectar columna de cantidad (Peso Neto)
+            col_cantidad = None
+            for col in df_export.columns:
+                if "peso" in col.lower() and "neto" in col.lower():
+                    col_cantidad = col
+                    break
+            
+            # Detectar columna de almacén
+            col_almacen = None
+            for col in df_export.columns:
+                if "almac" in col.lower():
+                    col_almacen = col
+                    break
+            
+            # Detectar columna de cliente
+            col_cliente = None
+            for col in df_export.columns:
+                if "cliente" in col.lower() or "gl.cliente" in col.lower():
+                    col_cliente = col
+                    break
+            
+            st.write(f"🔍 Columnas detectadas: Contrato='{col_contrato}', Fecha='{col_fecha}', Cantidad='{col_cantidad}', Almacén='{col_almacen}'")
+            
+            # Filtrar por mes si hay columna de fecha
+            if col_fecha and st.checkbox("Filtrar por mes seleccionado", value=True, key="filtrar_export"):
+                df_export[col_fecha] = pd.to_datetime(df_export[col_fecha], errors='coerce')
+                df_filtrado = df_export[
+                    (df_export[col_fecha].dt.month == mes_seleccionado) &
+                    (df_export[col_fecha].dt.year == anio_seleccionado)
+                ]
+                st.success(f"✅ Registros del mes: {len(df_filtrado)} de {len(df_export)}")
+            else:
+                df_filtrado = df_export
+            
+            if len(df_filtrado) > 0 and st.button("📊 Procesar y Clasificar", key="btn_procesar_export"):
+                # Clasificar por tipo de contrato
+                def clasificar_contrato(contrato):
+                    if pd.isna(contrato):
+                        return "OTRO", "?"
+                    contrato = str(contrato).upper()
+                    if contrato.startswith("CL"):
+                        return "VENT", "E"  # Venta nacional - Egreso
+                    elif contrato.startswith("ZO"):
+                        return "EDEV", "E"  # Canje salida - Egreso (devolución)
+                    elif contrato.startswith("ZR"):
+                        return "MDEV", "I"  # Canje entrada - Ingreso (recepción)
+                    elif contrato.startswith("ZU"):
+                        return "IM", "I"    # Importación
+                    else:
+                        return "OTRO", "?"
+                
+                # Mapeo de Almacén a División/Bodega
+                ALMACEN_A_DIVISION = {
+                    "plta.los lirios": ("TBA", "TETBA"),
+                    "los lirios": ("TBA", "TETBA"),
+                    "bod.ventanas": ("Ventana", "VENT"),
+                    "ventanas": ("Ventana", "VENT"),
+                    "tas barquito": ("Barquito", "BARQUITO"),
+                    "barquito": ("Barquito", "BARQUITO"),
+                    "term.mejillones": ("Terquim", "TERMEJ"),
+                    "terquim mejillones": ("Terquim", "TERMEJ"),
+                    "terquim mejillon": ("Terquim", "TERMEJ"),
+                    "interacid mej": ("Mejillones ICL", "MEJICL"),
+                    "interacid mej.": ("Mejillones ICL", "MEJICL"),
+                    "mejillones icl": ("Mejillones ICL", "MEJICL"),
+                    "bodega trading": ("Potrerillos", "SALPO"),
+                    "potrerillos": ("Potrerillos", "SALPO"),
+                    "caletones": ("Caletones", "TECA"),
+                    "san antonio": ("San Antonio", "CM"),
+                }
+                
+                def obtener_division_bodega(almacen):
+                    if pd.isna(almacen):
+                        return "Desconocido", "?"
+                    almacen_lower = str(almacen).lower().strip()
+                    for key, (div, bod) in ALMACEN_A_DIVISION.items():
+                        if key in almacen_lower:
+                            return div, bod
+                    return str(almacen), "?"
+                
+                # Procesar cada registro
+                registros_procesados = []
+                for idx, row in df_filtrado.iterrows():
+                    contrato = row[col_contrato] if col_contrato else ""
+                    tipo_mov, ingreso_egreso = clasificar_contrato(contrato)
+                    
+                    almacen = row[col_almacen] if col_almacen else ""
+                    division, bodega = obtener_division_bodega(almacen)
+                    
+                    cantidad = row[col_cantidad] if col_cantidad else 0
+                    try:
+                        cantidad = float(str(cantidad).replace(",", ".").replace(" ", "")) if cantidad else 0
+                    except:
+                        cantidad = 0
+                    
+                    cliente = row[col_cliente] if col_cliente else ""
+                    
+                    if cantidad > 0:
+                        registros_procesados.append({
+                            "Contrato": contrato,
+                            "Cliente": cliente,
+                            "Cantidad": cantidad,
+                            "Almacén": almacen,
+                            "División": division,
+                            "Bodega": bodega,
+                            "Tipo Mov": tipo_mov,
+                            "I/E": ingreso_egreso,
+                        })
+                
+                df_procesado = pd.DataFrame(registros_procesados)
+                
+                # Mostrar resumen
+                st.success(f"✅ Procesados {len(df_procesado)} registros")
+                
+                # Resumen por tipo
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    ventas = df_procesado[df_procesado["Tipo Mov"] == "VENT"]["Cantidad"].sum()
+                    st.metric("💰 Ventas (VENT)", f"{ventas:,.2f} TM")
+                with col2:
+                    canjes_sal = df_procesado[df_procesado["Tipo Mov"] == "EDEV"]["Cantidad"].sum()
+                    st.metric("↗️ Canjes Salida (ZO)", f"{canjes_sal:,.2f} TM")
+                with col3:
+                    canjes_ent = df_procesado[df_procesado["Tipo Mov"] == "MDEV"]["Cantidad"].sum()
+                    st.metric("↙️ Canjes Entrada (ZR)", f"{canjes_ent:,.2f} TM")
+                
+                # Resumen por división
+                st.write("### 📊 Resumen por División")
+                resumen_div = df_procesado.groupby(["División", "Tipo Mov"]).agg({
+                    "Cantidad": "sum",
+                    "Contrato": "count"
+                }).reset_index()
+                resumen_div.columns = ["División", "Tipo Mov", "Total TM", "Nº Registros"]
+                st.dataframe(resumen_div, use_container_width=True)
+                
+                # Mostrar detalle
+                with st.expander("📋 Ver detalle de registros", expanded=False):
+                    st.dataframe(df_procesado, use_container_width=True)
+                
+                # Guardar en session_state
+                st.session_state.df_export_procesado = df_procesado
+                st.session_state.export_cargado = True
+                
+        except Exception as e:
+            st.error(f"Error al leer archivo: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+
+# Mostrar datos de Export si ya están cargados
+if "df_export_procesado" in st.session_state:
+    with st.expander("📊 Datos Export cargados", expanded=False):
+        df_exp = st.session_state.df_export_procesado
+        st.write(f"Total registros: {len(df_exp)}")
+        resumen = df_exp.groupby("Tipo Mov")["Cantidad"].sum()
+        st.dataframe(resumen, use_container_width=True)
+
+st.markdown("---")
+
+# ============================================================================
+# FASE 1: CARGAR BALANCES DE DIVISIONES
+# ============================================================================
+st.subheader("📂 Fase 1: Cargar Balances de Divisiones")
 
 # Mostrar convenciones de nombres
 with st.expander("ℹ️ Convención de nombres de archivos", expanded=False):
@@ -114,7 +342,7 @@ archivos = st.file_uploader(
     key="balances"
 )
 
-st.subheader("📋 Paso 2: Cargar Respaldo SIREGAD (Opcional)")
+st.subheader("📋 Fase 1.5: Cargar Respaldo SIREGAD (Opcional)")
 
 archivo_siregad = st.file_uploader(
     "Sube el archivo SIREGAD Noviembre para auditoría",
@@ -123,7 +351,7 @@ archivo_siregad = st.file_uploader(
 )
 
 # ===== PASO 2.5: IMPORTAR FACTURAS DESDE EXCEL CM =====
-st.subheader("📑 Paso 2.5: Importar Facturas CM (Ventas/Compras)")
+st.subheader("📑 Fase 2: Importar Facturas CM (Ventas/Compras)")
 
 with st.expander("📤 Importar desde Excel Casa Matriz (CM)", expanded=False):
     st.markdown("""
@@ -268,17 +496,21 @@ if "facturas_importadas" in st.session_state and st.session_state.facturas_impor
         st.rerun()
 
 # ===== PASO 2.6: CUADRE CON PROGRAMACIÓN =====
-st.subheader("📊 Paso 2.6: Cuadre con Programación AS 2025")
+st.subheader("📊 Fase 5: Cuadre con Programación AS 2025")
 
 with st.expander("🔍 Validar datos vs Programación", expanded=False):
     st.markdown("""
     **Este módulo compara los datos extraídos de las divisiones con el Excel de Programación AS 2025.**
     
     📌 **Correspondencias:**
-    - **Salvador (SALV)** → Potrerillos + Barquito
-    - **Teniente (TTE)** → Caletones + TBA + San Antonio  
+    - **SALV** → Potrerillos + Barquito
+    - **TTE** → Caletones + TBA (Los Lirios) + San Antonio  
     - **DMH** → Ministro Hales
-    - **Chuqui** → Chuquicamata + RT + GM
+    - **CHU** → Chuquicamata + RT + GM
+    - **VENT** → Ventana
+    - **MEJ** → Mejillones Puerto
+    - **MEJICL** → Mejillones Interacid
+    - **TERMEJ** → Terquim Mejillones
     """)
     
     archivo_progra = st.file_uploader(
@@ -290,65 +522,152 @@ with st.expander("🔍 Validar datos vs Programación", expanded=False):
     # Seleccionar mes a comparar
     mes_progra = st.selectbox(
         "Mes a comparar",
-        ["noviembre", "octubre", "septiembre", "agosto", "julio", "junio", 
-         "mayo", "abril", "marzo", "febrero", "enero", "diciembre"],
+        ["enero", "febrero", "marzo", "abril", "mayo", "junio", 
+         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+        index=10,  # Default noviembre
         key="mes_progra"
     )
     
-    if archivo_progra and st.button("📊 Extraer y Comparar"):
+    # Selector de hojas a comparar
+    hojas_comparar = st.multiselect(
+        "Selecciona las hojas a extraer",
+        ["SALV", "TTE", "DMH", "CHU", "VENT", "MEJ", "MEJICL", "TERMEJ", "COMPRAS"],
+        default=["SALV", "TTE", "DMH", "CHU", "VENT"],
+        key="hojas_comparar"
+    )
+    
+    if archivo_progra and st.button("📊 Extraer y Comparar", key="btn_extraer_progra"):
         try:
             import openpyxl
             wb_progra = openpyxl.load_workbook(archivo_progra, data_only=True)
-            hojas = wb_progra.sheetnames
-            st.write(f"📋 Hojas encontradas: {hojas}")
+            hojas_excel = wb_progra.sheetnames
+            st.write(f"📋 Hojas encontradas: {hojas_excel}")
             
-            col_mes = COLUMNA_MES.get(mes_progra.lower(), 12)  # Default noviembre
+            # Obtener columna del mes (D=4=ENE hasta O=15=DIC)
+            col_mes = COLUMNA_MES_D_START.get(mes_progra.lower(), 13)  # Default noviembre
+            st.info(f"📅 Leyendo columna {col_mes} para {mes_progra.upper()}")
             
             datos_progra = {}
             
-            # ========== EXTRAER DATOS DE HOJA "Cuadrar" ==========
-            if "Cuadrar" in hojas:
-                ws_cuadrar = wb_progra["Cuadrar"]
+            # Función auxiliar para leer celda con manejo de None
+            def leer_celda(ws, row, col):
+                val = ws.cell(row=row, column=col).value
+                return float(val) if val is not None else 0.0
+            
+            # ========== EXTRAER DATOS DE HOJA "SALV" ==========
+            if "SALV" in hojas_comparar and "SALV" in hojas_excel:
+                ws = wb_progra["SALV"]
+                config = CONFIG_SALV["secciones"]
                 
-                # Salvador (filas aproximadas basadas en la imagen)
-                datos_progra["Salvador"] = {
-                    "produccion": ws_cuadrar.cell(row=17, column=col_mes).value or 0,
-                    "consumo_interno": ws_cuadrar.cell(row=18, column=col_mes).value or 0,
-                    "consumo_lixiviacion": ws_cuadrar.cell(row=19, column=col_mes).value or 0,
-                    "consumo_refineria": ws_cuadrar.cell(row=20, column=col_mes).value or 0,
-                    "otros": ws_cuadrar.cell(row=21, column=col_mes).value or 0,
+                datos_progra["Potrerillos"] = {
+                    "inventario_inicial": leer_celda(ws, config["Potrerillos"]["inventario_inicial"], col_mes),
+                    "produccion": leer_celda(ws, config["Potrerillos"]["produccion"], col_mes),
+                    "consumo_interno": leer_celda(ws, config["Potrerillos"]["consumo_interno"], col_mes),
+                    "excedente": leer_celda(ws, config["Potrerillos"]["excedente"], col_mes),
+                    "de_canjes": leer_celda(ws, config["Potrerillos"]["de_canjes"], col_mes),
+                    "total_compromisos": leer_celda(ws, config["Potrerillos"]["total_compromisos"], col_mes),
+                    "ventas": leer_celda(ws, config["Potrerillos"]["ventas"], col_mes),
+                    "canjes_devoluciones": leer_celda(ws, config["Potrerillos"]["canjes_devoluciones"], col_mes),
                 }
                 
-                # Teniente/Caletones (filas 34-44)
-                datos_progra["Teniente"] = {
-                    "saldo_inicial": ws_cuadrar.cell(row=35, column=col_mes).value or 0,
-                    "produccion": ws_cuadrar.cell(row=36, column=col_mes).value or 0,
-                    "consumo_interno": ws_cuadrar.cell(row=38, column=col_mes).value or 0,
-                    "entregas_caletones": ws_cuadrar.cell(row=39, column=col_mes).value or 0,
-                    "despachos_los_lirios": ws_cuadrar.cell(row=40, column=col_mes).value or 0,
-                    "ajuste_inventario": ws_cuadrar.cell(row=43, column=col_mes).value or 0,
-                    "saldo_final": ws_cuadrar.cell(row=44, column=col_mes).value or 0,
+                datos_progra["Barquito"] = {
+                    "inventario_inicial": leer_celda(ws, config["Barquito"]["inventario_inicial"], col_mes),
+                    "compras": leer_celda(ws, config["Barquito"]["compras"], col_mes),
+                    "total_compromisos": leer_celda(ws, config["Barquito"]["total_compromisos"], col_mes),
+                    "ventas": leer_celda(ws, config["Barquito"]["ventas"], col_mes),
+                    "a_canjes_devoluciones": leer_celda(ws, config["Barquito"]["a_canjes_devoluciones"], col_mes),
+                }
+                st.success("✅ SALV extraído")
+            
+            # ========== EXTRAER DATOS DE HOJA "TTE" ==========
+            if "TTE" in hojas_comparar and "TTE" in hojas_excel:
+                ws = wb_progra["TTE"]
+                config = CONFIG_TTE["secciones"]
+                
+                datos_progra["Caletones"] = {
+                    "inventario_inicial": leer_celda(ws, config["Caletones"]["inventario_inicial"], col_mes),
+                    "produccion": leer_celda(ws, config["Caletones"]["produccion"], col_mes),
+                    "consumo": leer_celda(ws, config["Caletones"]["consumo"], col_mes),
+                    "excedentes": leer_celda(ws, config["Caletones"]["excedentes"], col_mes),
+                    "traspaso_a_los_lirios": leer_celda(ws, config["Caletones"]["traspaso_a_los_lirios"], col_mes),
+                    "saldo_mes": leer_celda(ws, config["Caletones"]["saldo_mes"], col_mes),
                 }
                 
-                # Los Lirios (filas 47-55)
                 datos_progra["Los_Lirios"] = {
-                    "saldo_inicial": ws_cuadrar.cell(row=48, column=col_mes).value or 0,
-                    "recepcion": ws_cuadrar.cell(row=49, column=col_mes).value or 0,
-                    "entregas": ws_cuadrar.cell(row=51, column=col_mes).value or 0,
-                    "despachos_terquim": ws_cuadrar.cell(row=52, column=col_mes).value or 0,
-                    "ajuste": ws_cuadrar.cell(row=54, column=col_mes).value or 0,
-                    "saldo_final": ws_cuadrar.cell(row=55, column=col_mes).value or 0,
+                    "inventario_inicial": leer_celda(ws, config["Los_Lirios"]["inventario_inicial"], col_mes),
+                    "recepcion_desde_caletones": leer_celda(ws, config["Los_Lirios"]["recepcion_desde_caletones"], col_mes),
+                    "ventas": leer_celda(ws, config["Los_Lirios"]["ventas"], col_mes),
+                    "canjes_devoluciones": leer_celda(ws, config["Los_Lirios"]["canjes_devoluciones"], col_mes),
+                    "traspaso_a_san_antonio": leer_celda(ws, config["Los_Lirios"]["traspaso_a_san_antonio"], col_mes),
+                    "saldo_mes": leer_celda(ws, config["Los_Lirios"]["saldo_mes"], col_mes),
                 }
                 
-                # Terquim San Antonio (filas 57-65)
-                datos_progra["Terquim_SA"] = {
-                    "saldo_inicial": ws_cuadrar.cell(row=58, column=col_mes).value or 0,
-                    "recepcion_los_lirios": ws_cuadrar.cell(row=59, column=col_mes).value or 0,
-                    "recepcion_caletones": ws_cuadrar.cell(row=60, column=col_mes).value or 0,
-                    "despachos": ws_cuadrar.cell(row=62, column=col_mes).value or 0,
-                    "ajuste": ws_cuadrar.cell(row=64, column=col_mes).value or 0,
-                    "saldo_final": ws_cuadrar.cell(row=65, column=col_mes).value or 0,
+                datos_progra["San_Antonio"] = {
+                    "inventario_inicial": leer_celda(ws, config["San_Antonio"]["inventario_inicial"], col_mes),
+                    "recepcion_desde_los_lirios": leer_celda(ws, config["San_Antonio"]["recepcion_desde_los_lirios"], col_mes),
+                    "total_compromisos": leer_celda(ws, config["San_Antonio"]["total_compromisos"], col_mes),
+                    "ventas": leer_celda(ws, config["San_Antonio"]["ventas"], col_mes),
+                    "canjes_devoluciones": leer_celda(ws, config["San_Antonio"]["canjes_devoluciones"], col_mes),
+                    "saldo_mes": leer_celda(ws, config["San_Antonio"]["saldo_mes"], col_mes),
                 }
+                st.success("✅ TTE extraído")
+            
+            # ========== EXTRAER DATOS DE HOJA "DMH" ==========
+            if "DMH" in hojas_comparar and "DMH" in hojas_excel:
+                ws = wb_progra["DMH"]
+                config = CONFIG_DMH_PROGRA["secciones"]
+                
+                datos_progra["Ministro_Hales"] = {
+                    "inventario_inicial": leer_celda(ws, config["DMH"]["inventario_inicial"], col_mes),
+                    "produccion": leer_celda(ws, config["DMH"]["produccion"], col_mes),
+                    "consumo": leer_celda(ws, config["DMH"]["consumo"], col_mes),
+                    "excedentes": leer_celda(ws, config["DMH"]["excedentes"], col_mes),
+                    "compras": leer_celda(ws, config["DMH"]["compras"], col_mes),
+                    "retornos_canjes": leer_celda(ws, config["DMH"]["retornos_canjes"], col_mes),
+                    "total_compromisos": leer_celda(ws, config["DMH"]["total_compromisos"], col_mes),
+                    "ventas": leer_celda(ws, config["DMH"]["ventas"], col_mes),
+                    "canjes_devoluciones": leer_celda(ws, config["DMH"]["canjes_devoluciones"], col_mes),
+                    "saldo_mes": leer_celda(ws, config["DMH"]["saldo_mes"], col_mes),
+                }
+                st.success("✅ DMH extraído")
+            
+            # ========== EXTRAER DATOS DE HOJA "CHU" ==========
+            if "CHU" in hojas_comparar and "CHU" in hojas_excel:
+                ws = wb_progra["CHU"]
+                config = CONFIG_CHUQUI["secciones"]
+                
+                datos_progra["Chuquicamata"] = {
+                    "inventario_inicial": leer_celda(ws, config["Chuquicamata"]["inventario_inicial"], col_mes),
+                    "produccion": leer_celda(ws, config["Chuquicamata"]["produccion"], col_mes),
+                    "consumo_interno": leer_celda(ws, config["Chuquicamata"]["consumo_interno"], col_mes),
+                    "excedentes": leer_celda(ws, config["Chuquicamata"]["excedentes"], col_mes),
+                    "compras": leer_celda(ws, config["Chuquicamata"]["compras"], col_mes),
+                    "retornos_canjes": leer_celda(ws, config["Chuquicamata"]["retornos_canjes"], col_mes),
+                    "total_compromisos": leer_celda(ws, config["Chuquicamata"]["total_compromisos"], col_mes),
+                    "ventas": leer_celda(ws, config["Chuquicamata"]["ventas"], col_mes),
+                    "canjes_devoluciones": leer_celda(ws, config["Chuquicamata"]["canjes_devoluciones"], col_mes),
+                    "saldo_mes": leer_celda(ws, config["Chuquicamata"]["saldo_mes"], col_mes),
+                }
+                st.success("✅ CHU extraído")
+            
+            # ========== EXTRAER DATOS DE HOJA "VENT" ==========
+            if "VENT" in hojas_comparar and "VENT" in hojas_excel:
+                ws = wb_progra["VENT"]
+                config = CONFIG_VENT["secciones"]
+                
+                datos_progra["Ventanas"] = {
+                    "inventario_inicial": leer_celda(ws, config["Ventanas"]["inventario_inicial"], col_mes),
+                    "produccion": leer_celda(ws, config["Ventanas"]["produccion"], col_mes),
+                    "consumo_interno": leer_celda(ws, config["Ventanas"]["consumo_interno"], col_mes),
+                    "excedentes": leer_celda(ws, config["Ventanas"]["excedentes"], col_mes),
+                    "compras": leer_celda(ws, config["Ventanas"]["compras"], col_mes),
+                    "de_canjes": leer_celda(ws, config["Ventanas"]["de_canjes"], col_mes),
+                    "total_compromisos": leer_celda(ws, config["Ventanas"]["total_compromisos"], col_mes),
+                    "ventas": leer_celda(ws, config["Ventanas"]["ventas"], col_mes),
+                    "a_canjes": leer_celda(ws, config["Ventanas"]["a_canjes"], col_mes),
+                    "saldo_mensual": leer_celda(ws, config["Ventanas"]["saldo_mensual"], col_mes),
+                }
+                st.success("✅ VENT extraído")
             
             wb_progra.close()
             
@@ -360,9 +679,9 @@ with st.expander("🔍 Validar datos vs Programación", expanded=False):
             st.success(f"✅ Datos de Programación extraídos para {mes_progra.upper()}")
             
             for grupo, valores in datos_progra.items():
-                with st.expander(f"📁 {grupo}", expanded=True):
+                with st.expander(f"📁 {grupo}", expanded=False):
                     df_grupo = pd.DataFrame([
-                        {"Concepto": k.replace("_", " ").title(), "Valor (TN)": v}
+                        {"Concepto": k.replace("_", " ").title(), "Valor (TM)": f"{v:,.2f}"}
                         for k, v in valores.items() if v != 0
                     ])
                     st.dataframe(df_grupo, use_container_width=True)
@@ -379,64 +698,182 @@ if "datos_progra" in st.session_state and "df_completo" in st.session_state:
     
     df_completo = st.session_state.df_completo
     datos_progra = st.session_state.datos_progra
+    mes_progra = st.session_state.get("mes_progra", "")
+    
+    st.info(f"📅 Comparando datos de **{mes_progra.upper()}**")
     
     # Agregar datos de divisiones por grupo
     comparaciones = []
     
-    # Salvador = Potrerillos + Barquito
-    if "Salvador" in datos_progra:
-        df_salvador = df_completo[df_completo["Division"].isin(["Potrerillos", "Barquito"])]
-        prod_div = df_salvador[df_salvador["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
+    # ===== POTRERILLOS =====
+    if "Potrerillos" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "Potrerillos"]
         
+        # Producción
+        prod_div = df_div[df_div["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
         comparaciones.append({
-            "Grupo": "Salvador",
-            "Concepto": "Producción",
-            "Programación": datos_progra["Salvador"].get("produccion", 0),
-            "Divisiones": prod_div,
+            "División": "Potrerillos", "Concepto": "Producción",
+            "Programación": datos_progra["Potrerillos"].get("produccion", 0),
+            "Balance": prod_div,
+        })
+        
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Potrerillos", "Concepto": "Ventas",
+            "Programación": datos_progra["Potrerillos"].get("ventas", 0),
+            "Balance": ventas_div,
         })
     
-    # Teniente = Caletones + TBA + San Antonio
-    if "Teniente" in datos_progra:
-        df_teniente = df_completo[df_completo["Division"].isin(["Caletones", "TBA", "San Antonio"])]
+    # ===== BARQUITO =====
+    if "Barquito" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "Barquito"]
         
-        prod_div = df_teniente[df_teniente["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
         comparaciones.append({
-            "Grupo": "Teniente",
-            "Concepto": "Producción",
-            "Programación": datos_progra["Teniente"].get("produccion", 0),
-            "Divisiones": prod_div,
+            "División": "Barquito", "Concepto": "Ventas",
+            "Programación": datos_progra["Barquito"].get("ventas", 0),
+            "Balance": ventas_div,
+        })
+    
+    # ===== CALETONES =====
+    if "Caletones" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "Caletones"]
+        
+        # Producción
+        prod_div = df_div[df_div["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Caletones", "Concepto": "Producción",
+            "Programación": datos_progra["Caletones"].get("produccion", 0),
+            "Balance": prod_div,
         })
         
-        # TIEB (entregas internas)
-        tieb_div = df_teniente[df_teniente["Tipo Movimiento"] == "TIEB"]["Cantidad"].sum()
+        # Consumo
+        cons_div = df_div[df_div["Tipo Movimiento"] == "ECIP"]["Cantidad"].sum()
         comparaciones.append({
-            "Grupo": "Teniente",
-            "Concepto": "Entregas TIEB",
-            "Programación": datos_progra["Teniente"].get("despachos_los_lirios", 0),
-            "Divisiones": tieb_div,
+            "División": "Caletones", "Concepto": "Consumo",
+            "Programación": datos_progra["Caletones"].get("consumo", 0),
+            "Balance": cons_div,
+        })
+    
+    # ===== LOS LIRIOS (TBA) =====
+    if "Los_Lirios" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "TBA"]
+        
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Los Lirios (TBA)", "Concepto": "Ventas",
+            "Programación": datos_progra["Los_Lirios"].get("ventas", 0),
+            "Balance": ventas_div,
+        })
+    
+    # ===== SAN ANTONIO =====
+    if "San_Antonio" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "San Antonio"]
+        
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "San Antonio", "Concepto": "Ventas",
+            "Programación": datos_progra["San_Antonio"].get("ventas", 0),
+            "Balance": ventas_div,
+        })
+    
+    # ===== MINISTRO HALES =====
+    if "Ministro_Hales" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "Ministro Hales"]
+        
+        # Producción
+        prod_div = df_div[df_div["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Ministro Hales", "Concepto": "Producción",
+            "Programación": datos_progra["Ministro_Hales"].get("produccion", 0),
+            "Balance": prod_div,
+        })
+        
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Ministro Hales", "Concepto": "Ventas",
+            "Programación": datos_progra["Ministro_Hales"].get("ventas", 0),
+            "Balance": ventas_div,
+        })
+    
+    # ===== CHUQUICAMATA =====
+    if "Chuquicamata" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "Chuquicamata"]
+        
+        # Producción
+        prod_div = df_div[df_div["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Chuquicamata", "Concepto": "Producción",
+            "Programación": datos_progra["Chuquicamata"].get("produccion", 0),
+            "Balance": prod_div,
+        })
+        
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Chuquicamata", "Concepto": "Ventas",
+            "Programación": datos_progra["Chuquicamata"].get("ventas", 0),
+            "Balance": ventas_div,
+        })
+    
+    # ===== VENTANAS =====
+    if "Ventanas" in datos_progra:
+        df_div = df_completo[df_completo["Division"] == "Ventana"]
+        
+        # Producción
+        prod_div = df_div[df_div["Tipo Movimiento"] == "MPRO"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Ventanas", "Concepto": "Producción",
+            "Programación": datos_progra["Ventanas"].get("produccion", 0),
+            "Balance": prod_div,
+        })
+        
+        # Ventas
+        ventas_div = df_div[df_div["Tipo Movimiento"] == "VENT"]["Cantidad"].sum()
+        comparaciones.append({
+            "División": "Ventanas", "Concepto": "Ventas",
+            "Programación": datos_progra["Ventanas"].get("ventas", 0),
+            "Balance": ventas_div,
         })
     
     if comparaciones:
         df_comp = pd.DataFrame(comparaciones)
-        df_comp["Diferencia"] = df_comp["Programación"] - df_comp["Divisiones"]
+        df_comp["Diferencia"] = df_comp["Programación"] - df_comp["Balance"]
+        df_comp["% Dif"] = df_comp.apply(
+            lambda row: f"{(row['Diferencia']/row['Programación']*100):.1f}%" if row['Programación'] != 0 else "N/A",
+            axis=1
+        )
         df_comp["Estado"] = df_comp["Diferencia"].apply(
-            lambda x: "✅" if abs(x) <= TOLERANCIA_DIFERENCIA else ("⚠️" if abs(x) <= 10 else "❌")
+            lambda x: "✅" if abs(x) <= TOLERANCIA_DIFERENCIA else ("⚠️" if abs(x) <= 100 else "❌")
         )
         
-        st.dataframe(
-            df_comp.style.applymap(
-                lambda x: "background-color: #90EE90" if x == "✅" else 
-                         ("background-color: #FFD700" if x == "⚠️" else 
-                          ("background-color: #FF6B6B" if x == "❌" else "")),
-                subset=["Estado"]
-            ),
-            use_container_width=True
-        )
+        # Formatear números
+        df_display = df_comp.copy()
+        df_display["Programación"] = df_display["Programación"].apply(lambda x: f"{x:,.2f}")
+        df_display["Balance"] = df_display["Balance"].apply(lambda x: f"{x:,.2f}")
+        df_display["Diferencia"] = df_display["Diferencia"].apply(lambda x: f"{x:,.2f}")
+        
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
+        
+        # Resumen
+        ok_count = len(df_comp[df_comp["Estado"] == "✅"])
+        warn_count = len(df_comp[df_comp["Estado"] == "⚠️"])
+        error_count = len(df_comp[df_comp["Estado"] == "❌"])
+        
+        col1, col2, col3 = st.columns(3)
+        col1.metric("✅ Cuadran", ok_count)
+        col2.metric("⚠️ Diferencia pequeña", warn_count)
+        col3.metric("❌ No cuadran", error_count)
     else:
         st.info("No hay datos suficientes para comparar. Procesa los archivos de Balance primero.")
 
 # ===== PASO 3: AJUSTES MANUALES POR DIVISIÓN =====
-st.subheader("🔧 Paso 3: Ajustes Manuales (Opcional)")
+st.subheader("🔧 Fase 4: Ajustes Manuales (Opcional)")
 
 # Lista de divisiones disponibles para ajustes
 DIVISIONES_AJUSTES = ["Salvador", "Caletones", "TBA", "San Antonio", "Potrerillos", "Chuquicamata", 
