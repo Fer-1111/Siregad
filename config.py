@@ -629,15 +629,15 @@ CONFIG_RT = {
     "inventario_inicial": {
         "sheet": "ÁCIDO (SAP)",
         "cell": "E13",
-        "tipo_mov": "MPRO",
-        "movimiento": "I",
+        "tipo_mov": "",
+        "movimiento": "",
         "bodega": "RT",
         "material": "7664-93-9",
         "include_in_batch": False
     },
     "retiro": {
         "sheet": "ÁCIDO (SAP)",
-        "cell": "E27",
+        "cell": "E29",
         "tipo_mov": "ECIP",
         "movimiento": "E",
         "bodega": "RT",
@@ -646,7 +646,7 @@ CONFIG_RT = {
     },
     "recepcion": {
         "sheet": "ÁCIDO (SAP)",
-        "cell": "E22",
+        "cell": "E24",
         "tipo_mov": "TIPB",
         "movimiento": "I",
         "bodega": "RT",
@@ -655,7 +655,7 @@ CONFIG_RT = {
     },
     "inventario_final": {
         "sheet": "ÁCIDO (SAP)",
-        "cell": "E31",
+        "cell": "E29",
         "tipo_mov": "MPRO",
         "movimiento": "F",
         "bodega": "RT",
@@ -766,7 +766,7 @@ CONFIG_CHUQUICAMATA = {
 CONFIG_DMH = {
     "inventario_inicial": {
         "sheet": "REPORTE VCO",
-        "cell": "O35",
+        "cell": "O36",
         "tipo_mov": "MPRO",
         "movimiento": "I",
         "bodega": "CM",
@@ -775,7 +775,7 @@ CONFIG_DMH = {
     },
     "produccion": {
         "sheet": "REPORTE VCO",
-        "cell": "D35",
+        "cell": "D36",
         "tipo_mov": "MPRO",
         "movimiento": "I",
         "bodega": "CM",
@@ -784,7 +784,7 @@ CONFIG_DMH = {
     },
     "despacho_dgm": {
         "sheet": "REPORTE VCO",
-        "cell": "F35",
+        "cell": "F36",
         "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
@@ -793,7 +793,7 @@ CONFIG_DMH = {
     },
     "despacho_dch": {
         "sheet": "REPORTE VCO",
-        "cell": "H35",
+        "cell": "H36",
         "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
@@ -802,7 +802,7 @@ CONFIG_DMH = {
     },
     "despacho_drt": {
         "sheet": "REPORTE VCO",
-        "cell": "L35",
+        "cell": "L36",
         "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
@@ -811,7 +811,7 @@ CONFIG_DMH = {
     },
     "inventario_final": {
         "sheet": "REPORTE VCO",
-        "cell": "P35",
+        "cell": "P36",
         "tipo_mov": "MPRO",
         "movimiento": "F",
         "bodega": "CM",
@@ -824,10 +824,10 @@ CONFIG_DMH = {
 CONFIG_BARQUITO = {
     # 🔹 Inventario inicial X5 (NO se carga al batch)
     "inventario_inicial": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "X5",
-        "tipo_mov": "CL",
-        "movimiento": "I",
+        "tipo_mov": "",
+        "movimiento": "",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": False
@@ -835,7 +835,7 @@ CONFIG_BARQUITO = {
     
     # 🔹 Datos independientes C6 a C36 → I CL (guardar como datos separados, no sumados)
     "dato_c6": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C6",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -845,7 +845,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c7": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C7",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -855,7 +855,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c8": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C8",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -865,7 +865,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c9": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C9",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -875,7 +875,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c10": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C10",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -885,7 +885,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c11": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C11",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -895,7 +895,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c12": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C12",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -905,7 +905,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c13": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C13",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -915,7 +915,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c14": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C14",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -925,7 +925,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c15": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C15",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -935,7 +935,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c16": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C16",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -945,7 +945,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c17": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C17",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -955,7 +955,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c18": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C18",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -965,7 +965,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c19": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C19",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -975,7 +975,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c20": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C20",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -985,7 +985,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c21": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C21",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -995,7 +995,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c22": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C22",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1005,7 +1005,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c23": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C23",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1015,7 +1015,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c24": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C24",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1025,7 +1025,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c25": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C25",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1035,7 +1035,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c26": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C26",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1045,7 +1045,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c27": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C27",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1055,7 +1055,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c28": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C28",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1065,7 +1065,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c29": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C29",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1075,7 +1075,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c30": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C30",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1085,7 +1085,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c31": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C31",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1095,7 +1095,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c32": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C32",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1105,7 +1105,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c33": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C33",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1115,7 +1115,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c34": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C34",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1125,7 +1125,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c35": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C35",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1135,7 +1135,7 @@ CONFIG_BARQUITO = {
         "grupo": "datos_c"
     },
     "dato_c36": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "C36",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1144,30 +1144,321 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         "grupo": "datos_c"
     },
-    
-    # 🔹 Datos independientes E6 a E36 → I CL (guardar con contenido, no sumados)
-    "dato_e6": {
-        "sheet": "NOV 25",
-        "cell": "E6",
+    # 🔹 Datos independientes D8 a D38 → E CL (guardar con contenido, no sumados)
+    "dato_d8_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D8",
         "tipo_mov": "CL",
-        "movimiento": "I",
+        "movimiento": "E",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
         
     },
-    "dato_e7": {
-        "sheet": "NOV 25",
-        "cell": "E7",
+    "dato_d9_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D9",
         "tipo_mov": "CL",
-        "movimiento": "I",
+        "movimiento": "E",
         "bodega": "BARQUITO",
         "material": "7664-93-9",
         "include_in_batch": True,
         
     },
-    "dato_e8": {
-        "sheet": "NOV 25",
+    "dato_d10_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D10",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d11_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D11",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d12_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D12",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d13_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D13",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d14_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D14",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d15_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D15",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d16_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D16",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d17_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D17",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d18_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D18",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d19_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D19",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d20_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D20",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d21_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D21",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d22_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D22",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d23_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D23",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d24_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D24",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d25_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D25",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d26_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D26",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d27_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D27",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d28_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D28",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d29_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D29",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d30_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D30",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d31_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D31",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d32_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D32",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d33_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D33",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d34_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D34",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d35_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D35",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d36_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D36",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d37_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D37",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_d38_dic25": {
+        "sheet": "DIC 25",
+        "cell": "D38",
+        "tipo_mov": "CL",
+        "movimiento": "E",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+
+    # 🔹 Datos independientes E8 a E38 → I CL (guardar con contenido, no sumados)
+    "dato_e8_dic25": {
+        "sheet": "DIC 25",
         "cell": "E8",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1176,8 +1467,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e9": {
-        "sheet": "NOV 25",
+    "dato_e9_dic25": {
+        "sheet": "DIC 25",
         "cell": "E9",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1186,8 +1477,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e10": {
-        "sheet": "NOV 25",
+    "dato_e10_dic25": {
+        "sheet": "DIC 25",
         "cell": "E10",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1196,8 +1487,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e11": {
-        "sheet": "NOV 25",
+    "dato_e11_dic25": {
+        "sheet": "DIC 25",
         "cell": "E11",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1206,8 +1497,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e12": {
-        "sheet": "NOV 25",
+    "dato_e12_dic25": {
+        "sheet": "DIC 25",
         "cell": "E12",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1216,8 +1507,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e13": {
-        "sheet": "NOV 25",
+    "dato_e13_dic25": {
+        "sheet": "DIC 25",
         "cell": "E13",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1226,8 +1517,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e14": {
-        "sheet": "NOV 25",
+    "dato_e14_dic25": {
+        "sheet": "DIC 25",
         "cell": "E14",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1236,8 +1527,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e15": {
-        "sheet": "NOV 25",
+    "dato_e15_dic25": {
+        "sheet": "DIC 25",
         "cell": "E15",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1246,8 +1537,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e16": {
-        "sheet": "NOV 25",
+    "dato_e16_dic25": {
+        "sheet": "DIC 25",
         "cell": "E16",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1256,8 +1547,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e17": {
-        "sheet": "NOV 25",
+    "dato_e17_dic25": {
+        "sheet": "DIC 25",
         "cell": "E17",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1266,8 +1557,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e18": {
-        "sheet": "NOV 25",
+    "dato_e18_dic25": {
+        "sheet": "DIC 25",
         "cell": "E18",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1276,8 +1567,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e19": {
-        "sheet": "NOV 25",
+    "dato_e19_dic25": {
+        "sheet": "DIC 25",
         "cell": "E19",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1286,8 +1577,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e20": {
-        "sheet": "NOV 25",
+    "dato_e20_dic25": {
+        "sheet": "DIC 25",
         "cell": "E20",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1296,8 +1587,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e21": {
-        "sheet": "NOV 25",
+    "dato_e21_dic25": {
+        "sheet": "DIC 25",
         "cell": "E21",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1306,8 +1597,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e22": {
-        "sheet": "NOV 25",
+    "dato_e22_dic25": {
+        "sheet": "DIC 25",
         "cell": "E22",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1316,8 +1607,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e23": {
-        "sheet": "NOV 25",
+    "dato_e23_dic25": {
+        "sheet": "DIC 25",
         "cell": "E23",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1326,8 +1617,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e24": {
-        "sheet": "NOV 25",
+    "dato_e24_dic25": {
+        "sheet": "DIC 25",
         "cell": "E24",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1336,8 +1627,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e25": {
-        "sheet": "NOV 25",
+    "dato_e25_dic25": {
+        "sheet": "DIC 25",
         "cell": "E25",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1346,8 +1637,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e26": {
-        "sheet": "NOV 25",
+    "dato_e26_dic25": {
+        "sheet": "DIC 25",
         "cell": "E26",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1356,8 +1647,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e27": {
-        "sheet": "NOV 25",
+    "dato_e27_dic25": {
+        "sheet": "DIC 25",
         "cell": "E27",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1366,8 +1657,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e28": {
-        "sheet": "NOV 25",
+    "dato_e28_dic25": {
+        "sheet": "DIC 25",
         "cell": "E28",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1376,8 +1667,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e29": {
-        "sheet": "NOV 25",
+    "dato_e29_dic25": {
+        "sheet": "DIC 25",
         "cell": "E29",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1386,8 +1677,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e30": {
-        "sheet": "NOV 25",
+    "dato_e30_dic25": {
+        "sheet": "DIC 25",
         "cell": "E30",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1396,8 +1687,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e31": {
-        "sheet": "NOV 25",
+    "dato_e31_dic25": {
+        "sheet": "DIC 25",
         "cell": "E31",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1406,8 +1697,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e32": {
-        "sheet": "NOV 25",
+    "dato_e32_dic25": {
+        "sheet": "DIC 25",
         "cell": "E32",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1416,8 +1707,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e33": {
-        "sheet": "NOV 25",
+    "dato_e33_dic25": {
+        "sheet": "DIC 25",
         "cell": "E33",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1426,8 +1717,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e34": {
-        "sheet": "NOV 25",
+    "dato_e34_dic25": {
+        "sheet": "DIC 25",
         "cell": "E34",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1436,8 +1727,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e35": {
-        "sheet": "NOV 25",
+    "dato_e35_dic25": {
+        "sheet": "DIC 25",
         "cell": "E35",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1446,8 +1737,8 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
-    "dato_e36": {
-        "sheet": "NOV 25",
+    "dato_e36_dic25": {
+        "sheet": "DIC 25",
         "cell": "E36",
         "tipo_mov": "CL",
         "movimiento": "I",
@@ -1456,11 +1747,31 @@ CONFIG_BARQUITO = {
         "include_in_batch": True,
         
     },
+    "dato_e37_dic25": {
+        "sheet": "DIC 25",
+        "cell": "E37",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
+    "dato_e38_dic25": {
+        "sheet": "DIC 25",
+        "cell": "E38",
+        "tipo_mov": "CL",
+        "movimiento": "I",
+        "bodega": "BARQUITO",
+        "material": "7664-93-9",
+        "include_in_batch": True,
+        
+    },
     
-    # 🔹 P41 → E VENT
+    # 🔹 P41 → E VENT#n42
     "vent_p41": {
-        "sheet": "NOV 25",
-        "cell": "P41",
+        "sheet": "DIC 25",
+        "cell": "N42",
         "tipo_mov": "VENT",
         "movimiento": "E",
         "bodega": "BARQUITO",
@@ -1470,8 +1781,8 @@ CONFIG_BARQUITO = {
     
     # 🔹 P42 → E VENT
     "vent_p42": {
-        "sheet": "NOV 25",
-        "cell": "P42",
+        "sheet": "DIC 25",
+        "cell": "N43",
         "tipo_mov": "VENT",
         "movimiento": "E",
         "bodega": "BARQUITO",
@@ -1481,8 +1792,8 @@ CONFIG_BARQUITO = {
     
     # 🔹 P43 → E TIEB
     "tieb_p43": {
-        "sheet": "NOV 25",
-        "cell": "P43",
+        "sheet": "DIC 25",
+        "cell": "N44",
         "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "BARQUITO",
@@ -1492,7 +1803,7 @@ CONFIG_BARQUITO = {
     
     # 🔹 Z41 → I TIPB (si no hay valor, guardar 0,000)
     "recepcion_z41": {
-        "sheet": "NOV 25",
+        "sheet": "DIC 25",
         "cell": "Z41",
         "tipo_mov": "TIPB",
         "movimiento": "I",
@@ -1504,8 +1815,8 @@ CONFIG_BARQUITO = {
     
     # 🔹 Inventario final AN 14 (NO se carga al batch)
     "inventario_final": {
-        "sheet": "NOV 25",
-        "cell": "AN14",
+        "sheet": "DIC 25",
+        "cell": "AP16",
         "tipo_mov": "CL",
         "movimiento": "",
         "bodega": "BARQUITO",
@@ -1530,7 +1841,7 @@ CONFIG_DGM = {
     # 🔹 E41 → I TIPB (Recepción)
     "recepcion_e41": {
         "sheet": "Acido ",
-        "cell": "E41",
+        "cell": "E42",
         "tipo_mov": "TIPB",
         "movimiento": "I",
         "bodega": "DGM",
@@ -1541,7 +1852,7 @@ CONFIG_DGM = {
     # 🔹 J41 → E ECIP (Consumo interno)
     "consumo_j41": {
         "sheet": "Acido ",
-        "cell": "J41",
+        "cell": "J42",
         "tipo_mov": "ECIP",
         "movimiento": "E",
         "bodega": "DGM",
