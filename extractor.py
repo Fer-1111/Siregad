@@ -44,13 +44,13 @@ def extraer_movimientos(path_excel, config, fecha, division):
             
             print(f"[DEBUG] {concepto}: celda {celda} = {valor}")
 
-            # Saltar si el valor es None o 0 (pero NO para inventarios)
+            # Saltar si el valor es None o 0 (pero incluir si es inventario
+            # o si la configuración indica explícitamente incluir ceros)
             if valor is None or valor == 0:
-                # Siempre incluir inventario_inicial e inventario_final aunque sea 0
-                if "inventario" not in concepto:
-                    continue
+                if "inventario" in concepto or cfg.get("include_if_zero", False):
+                    valor = 0  # Forzar 0 cuando se requiere incluir
                 else:
-                    valor = 0  # Forzar 0 para inventarios
+                    continue
 
             # Guardar todo en registro intermedio
             registro = {
