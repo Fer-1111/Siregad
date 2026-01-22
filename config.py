@@ -627,7 +627,7 @@ CONFIG_SAN_ANTONIO = {
 # RT RADOMIRO TOMIC
 CONFIG_RT = {
     "inventario_inicial": {
-        "sheet": "ÁCIDO (SAP)",
+        "sheet": "ÁCIDO",
         "cell": "E13",
         "tipo_mov": "",
         "movimiento": "",
@@ -636,8 +636,8 @@ CONFIG_RT = {
         "include_in_batch": False
     },
     "retiro": {
-        "sheet": "ÁCIDO (SAP)",
-        "cell": "E29",
+        "sheet": "ÁCIDO",
+        "cell": "e29",
         "tipo_mov": "ECIP",
         "movimiento": "E",
         "bodega": "RT",
@@ -645,7 +645,7 @@ CONFIG_RT = {
         "include_in_batch": True
     },
     "recepcion": {
-        "sheet": "ÁCIDO (SAP)",
+        "sheet": "ÁCIDO",
         "cell": "E24",
         "tipo_mov": "TIPB",
         "movimiento": "I",
@@ -654,10 +654,10 @@ CONFIG_RT = {
         "include_in_batch": True
     },
     "inventario_final": {
-        "sheet": "ÁCIDO (SAP)",
-        "cell": "E29",
-        "tipo_mov": "MPRO",
-        "movimiento": "F",
+        "sheet": "ÁCIDO",
+        "cell": "E38",
+        "tipo_mov": "",
+        "movimiento": "",
         "bodega": "RT",
         "material": "7664-93-9",
         "include_in_batch": False
@@ -825,7 +825,7 @@ CONFIG_BARQUITO = {
     # 🔹 Inventario inicial X5 (NO se carga al batch)
     "inventario_inicial": {
         "sheet": "DIC 25",
-        "cell": "X5",
+        "cell": "Z7",
         "tipo_mov": "",
         "movimiento": "",
         "bodega": "BARQUITO",
@@ -833,317 +833,7 @@ CONFIG_BARQUITO = {
         "include_in_batch": False
     },
     
-    # 🔹 Datos independientes C6 a C36 → I CL (guardar como datos separados, no sumados)
-    "dato_c6": {
-        "sheet": "DIC 25",
-        "cell": "C6",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c7": {
-        "sheet": "DIC 25",
-        "cell": "C7",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c8": {
-        "sheet": "DIC 25",
-        "cell": "C8",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c9": {
-        "sheet": "DIC 25",
-        "cell": "C9",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c10": {
-        "sheet": "DIC 25",
-        "cell": "C10",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c11": {
-        "sheet": "DIC 25",
-        "cell": "C11",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c12": {
-        "sheet": "DIC 25",
-        "cell": "C12",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c13": {
-        "sheet": "DIC 25",
-        "cell": "C13",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c14": {
-        "sheet": "DIC 25",
-        "cell": "C14",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c15": {
-        "sheet": "DIC 25",
-        "cell": "C15",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c16": {
-        "sheet": "DIC 25",
-        "cell": "C16",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c17": {
-        "sheet": "DIC 25",
-        "cell": "C17",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c18": {
-        "sheet": "DIC 25",
-        "cell": "C18",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c19": {
-        "sheet": "DIC 25",
-        "cell": "C19",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c20": {
-        "sheet": "DIC 25",
-        "cell": "C20",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c21": {
-        "sheet": "DIC 25",
-        "cell": "C21",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c22": {
-        "sheet": "DIC 25",
-        "cell": "C22",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c23": {
-        "sheet": "DIC 25",
-        "cell": "C23",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c24": {
-        "sheet": "DIC 25",
-        "cell": "C24",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c25": {
-        "sheet": "DIC 25",
-        "cell": "C25",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c26": {
-        "sheet": "DIC 25",
-        "cell": "C26",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c27": {
-        "sheet": "DIC 25",
-        "cell": "C27",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c28": {
-        "sheet": "DIC 25",
-        "cell": "C28",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c29": {
-        "sheet": "DIC 25",
-        "cell": "C29",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c30": {
-        "sheet": "DIC 25",
-        "cell": "C30",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c31": {
-        "sheet": "DIC 25",
-        "cell": "C31",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c32": {
-        "sheet": "DIC 25",
-        "cell": "C32",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c33": {
-        "sheet": "DIC 25",
-        "cell": "C33",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c34": {
-        "sheet": "DIC 25",
-        "cell": "C34",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c35": {
-        "sheet": "DIC 25",
-        "cell": "C35",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
-    "dato_c36": {
-        "sheet": "DIC 25",
-        "cell": "C36",
-        "tipo_mov": "CL",
-        "movimiento": "I",
-        "bodega": "BARQUITO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "grupo": "datos_c"
-    },
+    # 🔹 Datos independientes C6 a C36 → I CL (removed to avoid extracting header cells)
     # 🔹 Datos independientes D8 a D38 → E CL (guardar con contenido, no sumados)
     "dato_d8_dic25": {
         "sheet": "DIC 25",
@@ -1804,7 +1494,7 @@ CONFIG_BARQUITO = {
     # 🔹 Z41 → I TIPB (si no hay valor, guardar 0,000)
     "recepcion_z41": {
         "sheet": "DIC 25",
-        "cell": "Z41",
+        "cell": "X42",
         "tipo_mov": "TIPB",
         "movimiento": "I",
         "bodega": "BARQUITO",
