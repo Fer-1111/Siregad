@@ -103,9 +103,14 @@ def extraer_movimientos(path_excel, config, fecha, division):
                 # Es una celda simple, obtener por coordenadas y parsear
                 col_letter, row = coordinate_from_string(celda)
                 col = column_index_from_string(col_letter)
-                cell_val = ws.cell(row=row, column=col).value
-                # Debug detallado para diagnóstico
-                debug_msg = f"📍 {concepto}: Hoja='{matched}' | Celda={celda} (F{row}C{col}) | Raw={repr(cell_val)}"
+                cell_obj = ws.cell(row=row, column=col)
+                cell_val = cell_obj.value
+                # Debug detallado para diagnóstico con tipo de dato y fórmula si existe
+                cell_type = type(cell_val).__name__
+                has_formula = hasattr(cell_obj, 'data_type') and cell_obj.data_type == 'f'
+                debug_msg = f"📍 {concepto}: Hoja='{matched}' | Celda={celda} (Row{row}Col{col}) | Tipo={cell_type} | Raw={repr(cell_val)}"
+                if has_formula:
+                    debug_msg += f" | Fórmula detectada"
                 print(debug_msg)
                 valor = parse_numeric(cell_val) if cell_val is not None else None
                 print(f"   → Parseado: {valor}")

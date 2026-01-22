@@ -1139,7 +1139,15 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
                    "Concentración (0,00000)", "Ingreso/Egreso", "Tipo de Movimiento", "Cantidad", 
                    "Unidad Medida", "Expediente Comunicación Anticipada", "Rut", "Nombre"]
         
-        for division in df_completo["Division"].unique():
+        # Orden de divisiones según especificación
+        orden_divisiones = ["Potrerillos", "Caletones", "TBA", "Radomiro Tomic", 
+                          "Chuquicamata", "Gabriela Mistral", "Ministro Hales", "Barquito", 
+                          "San Antonio"]
+        
+        # Filtrar divisiones que existen en df_completo y mantener el orden
+        divisiones_ordenadas = [div for div in orden_divisiones if div in df_completo["Division"].unique()]
+        
+        for division in divisiones_ordenadas:
             df_div = df_completo[df_completo["Division"] == division].copy()
             
             # Calcular totales simplificados
@@ -1220,8 +1228,20 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             for idx, row in df_batch_agrupado.iterrows():
                 # Columna 1: dd-mm-aaaa (Fecha)
                 ws.cell(row=row_actual, column=1).value = fecha
-                # Columna 2: Número Factura
-                ws.cell(row=row_actual, column=2).value = row.get("Grupo", "")
+                
+                # Columna 2: Número Factura - Generar código especial para NO VENT
+                movimiento = row.get("Movimiento", "")
+                tipo_mov = row.get("Tipo Movimiento", "")
+                
+                # Si NO es "E VENT", generar el código K.[movimiento].[tipo_mov].DIC
+                if not (movimiento == "E" and tipo_mov == "VENT"):
+                    numero_factura = f"K.{movimiento}.{tipo_mov}.DIC"
+                else:
+                    # Para E VENT, usar el grupo (número de factura real)
+                    numero_factura = row.get("Grupo", "")
+                
+                ws.cell(row=row_actual, column=2).value = numero_factura
+                
                 # Columna 3: Id. Bodega
                 ws.cell(row=row_actual, column=3).value = row.get("Bodega", "")
                 # Columna 4: SQC CAS/Nombre Mezcla
@@ -1437,7 +1457,15 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
                    "Concentración (0,00000)", "Ingreso/Egreso", "Tipo de Movimiento", "Cantidad", 
                    "Unidad Medida", "Expediente Comunicación Anticipada", "Rut", "Nombre"]
         
-        for division in df_completo["Division"].unique():
+        # Orden de divisiones según especificación
+        orden_divisiones = ["Potrerillos", "Caletones", "TBA", "Radomiro Tomic", 
+                          "Chuquicamata", "Gabriela Mistral", "Ministro Hales", "Barquito", 
+                          "San Antonio"]
+        
+        # Filtrar divisiones que existen en df_completo y mantener el orden
+        divisiones_ordenadas = [div for div in orden_divisiones if div in df_completo["Division"].unique()]
+        
+        for division in divisiones_ordenadas:
             df_div = df_completo[df_completo["Division"] == division].copy()
             
             inv_inicial = df_div[df_div["Concepto"].str.contains("inventario_inicial", na=False)]["Cantidad"].sum()
@@ -1495,7 +1523,19 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
                 
                 for idx, row in df_batch_agrupado.iterrows():
                     ws.cell(row=row_actual, column=1).value = fecha
-                    ws.cell(row=row_actual, column=2).value = row.get("Grupo", "")
+                    
+                    # Columna 2: Número Factura - Generar código especial para NO VENT
+                    movimiento = row.get("Movimiento", "")
+                    tipo_mov = row.get("Tipo Movimiento", "")
+                    
+                    # Si NO es "E VENT", generar el código K.[movimiento].[tipo_mov].DIC
+                    if not (movimiento == "E" and tipo_mov == "VENT"):
+                        numero_factura = f"K.{movimiento}.{tipo_mov}.DIC"
+                    else:
+                        # Para E VENT, usar el grupo (número de factura real)
+                        numero_factura = row.get("Grupo", "")
+                    
+                    ws.cell(row=row_actual, column=2).value = numero_factura
                     ws.cell(row=row_actual, column=3).value = row.get("Bodega", "")
                     ws.cell(row=row_actual, column=4).value = row.get("Material", "")
                     conc = row.get("Concentracion", "")

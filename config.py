@@ -136,7 +136,7 @@ CONFIG_POTRERILLOS = {
     "ajuste_tas": {
         "sheet": "Dic 2025",
         "cell": "D25",
-        "tipo_mov": "EDEV",
+        "tipo_mov": "EDEV (se agrega?)",
         "movimiento": "E",
         "bodega": "SALPO",
         "material": "7664-93-9",
@@ -151,7 +151,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True
     },
     "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
@@ -161,7 +160,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True,
     },
     "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
@@ -171,17 +169,15 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True,
     },
     "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
         "cell": "D30",
-        "tipo_mov": "ECIP",
-        "movimiento": "E",
+        "tipo_mov": "MCIP",
+        "movimiento": "I",
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True,
     },
     "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
@@ -191,7 +187,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": False,
     },
     "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
@@ -201,7 +196,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True,
     },
     "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
@@ -211,7 +205,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True,
     },
     "rebaja_por_ventas_consumos": {
         "sheet": "Dic 2025",
@@ -221,7 +214,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": False
     },
     "consumo_desde_proceso_plantas_gases": {
         "sheet": "Dic 2025",
@@ -231,7 +223,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": False
     },
     "inventario_final": {
         "sheet": "Dic 2025",
@@ -250,7 +241,6 @@ CONFIG_POTRERILLOS = {
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": False,
-        "include_if_zero": True,
         "grupo": "total_libre_disposicion"
     }
 }
@@ -284,8 +274,8 @@ CONFIG_CALETONES = {
     "ajuste_inventario": {
         "sheet": "Balance",
         "cell": "C9",
-        "tipo_mov": "EDEV",
-        "movimiento": "E",
+        "tipo_mov": "MDEV",
+        "movimiento": "I",
         "bodega": "TECA",
         "material": "7664-93-9",
         "include_in_batch": True
@@ -443,41 +433,41 @@ CONFIG_TBA = {
         "material": "7664-93-9",
         "include_in_batch": True
     },
-    # Entregado F17 a F22 - ETIEB
+    # Entregado F17 a F22 - TIEB
     "entregado_f17": {
         "sheet": "Balance",
         "cell": "F17",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "TETBA",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "entregado"
+
     },
     "entregado_f18": {
         "sheet": "Balance",
         "cell": "F18",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "TETBA",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "entregado"
+    
     },
     "entregado_f19": {
         "sheet": "Balance",
         "cell": "F19",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "TETBA",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "grupo": "entregado"
+       
     },
     "entregado_f20": {
         "sheet": "Balance",
         "cell": "F20",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "TETBA",
         "material": "7664-93-9",
@@ -487,7 +477,7 @@ CONFIG_TBA = {
     "consumo_interno_en_planta": {
         "sheet": "Balance",
         "cell": "F21",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "TETBA",
         "material": "7664-93-9",
@@ -497,7 +487,7 @@ CONFIG_TBA = {
     "entregado_f22": {
         "sheet": "Balance",
         "cell": "F22",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "TETBA",
         "material": "7664-93-9",
@@ -547,7 +537,7 @@ CONFIG_SAN_ANTONIO = {
     "entregado_i17": {
         "sheet": "Balance",
         "cell": "I17",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
         "material": "7664-93-9",
@@ -557,7 +547,7 @@ CONFIG_SAN_ANTONIO = {
     "entregado_i18": {
         "sheet": "Balance",
         "cell": "I18",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
         "material": "7664-93-9",
@@ -567,7 +557,7 @@ CONFIG_SAN_ANTONIO = {
     "entregado_i19": {
         "sheet": "Balance",
         "cell": "I19",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
         "material": "7664-93-9",
@@ -577,7 +567,7 @@ CONFIG_SAN_ANTONIO = {
     "entregado_i20": {
         "sheet": "Balance",
         "cell": "I20",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
         "material": "7664-93-9",
@@ -587,7 +577,7 @@ CONFIG_SAN_ANTONIO = {
     "entregado_i21": {
         "sheet": "Balance",
         "cell": "I21",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
         "material": "7664-93-9",
@@ -597,21 +587,12 @@ CONFIG_SAN_ANTONIO = {
     "entregado_i22": {
         "sheet": "Balance",
         "cell": "I22",
-        "tipo_mov": "ETIEB",
+        "tipo_mov": "TIEB",
         "movimiento": "E",
         "bodega": "CM",
         "material": "7664-93-9",
         "include_in_batch": True,
         "grupo": "entregado"
-    },
-    "ajuste_inv": {
-        "sheet": "Balance",
-        "cell": "I27",
-        "tipo_mov": "(preguntar)",
-        "movimiento": "E",
-        "bodega": "CM",
-        "material": "7664-93-9",
-        "include_in_batch": True
     },
     "inventario_final": {
         "sheet": "Balance",
@@ -1528,8 +1509,8 @@ CONFIG_DGM = {
         "include_in_batch": False
     },
     
-    # 🔹 E41 → I TIPB (Recepción)
-    "recepcion_e41": {
+    # 🔹 E42 → I TIPB (Recepción)
+    "recepcion_e42": {
         "sheet": "Acido ",
         "cell": "E42",
         "tipo_mov": "TIPB",
@@ -1539,8 +1520,8 @@ CONFIG_DGM = {
         "include_in_batch": True
     },
     
-    # 🔹 J41 → E ECIP (Consumo interno)
-    "consumo_j41": {
+    # 🔹 J42 → E ECIP (Consumo interno)
+    "consumo_j42": {
         "sheet": "Acido ",
         "cell": "J42",
         "tipo_mov": "ECIP",
