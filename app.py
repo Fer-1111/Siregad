@@ -85,17 +85,25 @@ def detectar_division(nombre_archivo):
     return None
 
 
-fecha = st.date_input(
-    "Fecha de los movimientos",
-    value=date.today(),
-)
+# Calcular el último día del mes anterior al mes actual
+import calendar
+hoy = date.today()
 
-# Obtener mes y año de la fecha seleccionada
-mes_seleccionado = fecha.month
-anio_seleccionado = fecha.year
+# Si estamos en enero, el mes anterior es diciembre del año anterior
+if hoy.month == 1:
+    mes_seleccionado = 12
+    anio_seleccionado = hoy.year - 1
+else:
+    mes_seleccionado = hoy.month - 1
+    anio_seleccionado = hoy.year
+
+ultimo_dia = calendar.monthrange(anio_seleccionado, mes_seleccionado)[1]
+fecha_ultimo_dia = date(anio_seleccionado, mes_seleccionado, ultimo_dia)
+fecha = fecha_ultimo_dia
+
 MESES_NOMBRES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio",
                  7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
-st.info(f"📅 Procesando: **{MESES_NOMBRES[mes_seleccionado]} {anio_seleccionado}**")
+st.info(f"📅 Procesando: **{MESES_NOMBRES[mes_seleccionado]} {anio_seleccionado}** (Fecha: {fecha_ultimo_dia.strftime('%d-%m-%Y')})")
 
 # ============================================================================
 # FASE 0: CARGAR ARCHIVO EXPORT (SOC) - FUENTE MAESTRA DE FACTURAS
@@ -1120,18 +1128,19 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
         
         row_actual = 1
         
-        # Colores por división
+        # Colores por división - Verde manzana pastel para todas
+        color_verde_manzana = "C1E1C1"  # Verde manzana pastel
         colores_division = {
-            "Salvador": "FFFF99",      # Amarillo
-            "Caletones": "FFA500",     # Naranja
-            "Potrerillos": "90EE90",   # Verde claro
-            "TBA": "87CEEB",           # Azul cielo
-            "San Antonio": "F0E68C",   # Caqui
-            "Chuquicamata": "DDA0DD",  # Púrpura claro
-            "Radomiro Tomic": "FFB6C1", # Rosa
-            "Gabriela Mistral": "D8BFD8", # Lavanda
-            "Ministro Hales": "98FB98", # Verde pálido
-            "Barquito": "ADD8E6",      # Azul claro
+            "Salvador": color_verde_manzana,
+            "Caletones": color_verde_manzana,
+            "Potrerillos": color_verde_manzana,
+            "TBA": color_verde_manzana,
+            "San Antonio": color_verde_manzana,
+            "Chuquicamata": color_verde_manzana,
+            "Radomiro Tomic": color_verde_manzana,
+            "Gabriela Mistral": color_verde_manzana,
+            "Ministro Hales": color_verde_manzana,
+            "Barquito": color_verde_manzana,
         }
         
         # Header de columnas según formato SIREGAD
@@ -1146,6 +1155,15 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
         
         # Filtrar divisiones que existen en df_completo y mantener el orden
         divisiones_ordenadas = [div for div in orden_divisiones if div in df_completo["Division"].unique()]
+        
+        # ===== HEADER GLOBAL (UNA SOLA VEZ AL INICIO) =====
+        for col_idx, col_name in enumerate(columnas, 1):
+            cell = ws.cell(row=row_actual, column=col_idx)
+            cell.value = col_name
+            cell.fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+            cell.font = Font(bold=True, color="FFFFFF", size=11)
+            cell.alignment = Alignment(horizontal="center", wrap_text=True)
+        row_actual += 1
         
         for division in divisiones_ordenadas:
             df_div = df_completo[df_completo["Division"] == division].copy()
@@ -1171,33 +1189,15 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             cell_header.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
             cell_header.font = Font(bold=True, size=12)
             cell_header.alignment = Alignment(horizontal="left", vertical="center")
-            ws.merge_cells(f'A{row_actual}:I{row_actual}')
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
             
-            # Agregar INV INICIAL en la misma fila a la derecha
-            cell_inv_ini_label = ws[f'J{row_actual}']
-            cell_inv_ini_label.value = "INV INICIAL"
-            cell_inv_ini_label.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-            cell_inv_ini_label.font = Font(bold=True)
-            cell_inv_ini_label.alignment = Alignment(horizontal="right")
-            ws.merge_cells(f'J{row_actual}:K{row_actual}')
-            
-            cell_inv_ini_valor = ws[f'L{row_actual}']
+            # Agregar INV INICIAL en columna H (donde van las cantidades)
+            cell_inv_ini_valor = ws[f'H{row_actual}']
             cell_inv_ini_valor.value = inv_inicial
             cell_inv_ini_valor.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-            cell_inv_ini_valor.font = Font(bold=True)
-            cell_inv_ini_valor.alignment = Alignment(horizontal="right")
+            cell_inv_ini_valor.font = Font(bold=True, size=11)
+            cell_inv_ini_valor.alignment = Alignment(horizontal="center")
             cell_inv_ini_valor.number_format = '#,##0.000'
-            ws.merge_cells(f'L{row_actual}:M{row_actual}')
-            
-            row_actual += 1
-            
-            # ===== HEADER DE COLUMNAS =====
-            for col_idx, col_name in enumerate(columnas, 1):
-                cell = ws.cell(row=row_actual, column=col_idx)
-                cell.value = col_name
-                cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-                cell.font = Font(bold=True, color="FFFFFF")
-                cell.alignment = Alignment(horizontal="center", wrap_text=True)
             
             row_actual += 1
             
@@ -1227,18 +1227,23 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             
             for idx, row in df_batch_agrupado.iterrows():
                 # Columna 1: dd-mm-aaaa (Fecha)
-                ws.cell(row=row_actual, column=1).value = fecha
+                ws.cell(row=row_actual, column=1).value = fecha_ultimo_dia
                 
                 # Columna 2: Número Factura - Generar código especial para NO VENT
                 movimiento = row.get("Movimiento", "")
                 tipo_mov = row.get("Tipo Movimiento", "")
+                grupo = row.get("Grupo", "")
                 
-                # Si NO es "E VENT", generar el código K.[movimiento].[tipo_mov].DIC
+                # Si NO es "E VENT", generar el código
                 if not (movimiento == "E" and tipo_mov == "VENT"):
-                    numero_factura = f"K.{movimiento}.{tipo_mov}.DIC"
+                    # Si es ajuste manual, usar 'Ajuste' en lugar del tipo_mov
+                    if "ajuste_manual" in grupo.lower():
+                        numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
+                    else:
+                        numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
                 else:
                     # Para E VENT, usar el grupo (número de factura real)
-                    numero_factura = row.get("Grupo", "")
+                    numero_factura = f"'{grupo}'"
                 
                 ws.cell(row=row_actual, column=2).value = numero_factura
                 
@@ -1276,6 +1281,64 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
                         cell.number_format = 'DD-MM-YYYY'
                 
                 row_actual += 1
+            
+            # ===== TOTALES DE MOVIMIENTOS =====
+            # Total de Ingresos (I)
+            total_ingresos = df_div[(df_div["Movimiento"] == "I") & (~df_div["Concepto"].str.contains("inventario", na=False))]["Cantidad"].sum()
+            
+            cell_total_i_label = ws[f'A{row_actual}']
+            cell_total_i_label.value = "TOTAL INGRESOS (I)"
+            cell_total_i_label.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_i_label.font = Font(bold=True)
+            cell_total_i_label.alignment = Alignment(horizontal="right")
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
+            
+            cell_total_i_valor = ws[f'H{row_actual}']
+            cell_total_i_valor.value = total_ingresos
+            cell_total_i_valor.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_i_valor.font = Font(bold=True)
+            cell_total_i_valor.alignment = Alignment(horizontal="center")
+            cell_total_i_valor.number_format = '#,##0.000'
+            
+            row_actual += 1
+            
+            # Total de Egresos (E)
+            total_egresos = df_div[(df_div["Movimiento"] == "E") & (~df_div["Concepto"].str.contains("inventario", na=False))]["Cantidad"].sum()
+            
+            cell_total_e_label = ws[f'A{row_actual}']
+            cell_total_e_label.value = "TOTAL EGRESOS (E)"
+            cell_total_e_label.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_e_label.font = Font(bold=True)
+            cell_total_e_label.alignment = Alignment(horizontal="right")
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
+            
+            cell_total_e_valor = ws[f'H{row_actual}']
+            cell_total_e_valor.value = total_egresos
+            cell_total_e_valor.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_e_valor.font = Font(bold=True)
+            cell_total_e_valor.alignment = Alignment(horizontal="center")
+            cell_total_e_valor.number_format = '#,##0.000'
+            
+            row_actual += 1
+            
+            # Total general (todos los movimientos sin inventarios)
+            total_movimientos = df_div[~df_div["Concepto"].str.contains("inventario", na=False)]["Cantidad"].sum()
+            
+            cell_total_gen_label = ws[f'A{row_actual}']
+            cell_total_gen_label.value = "TOTAL MOVIMIENTOS"
+            cell_total_gen_label.fill = PatternFill(start_color="808080", end_color="808080", fill_type="solid")
+            cell_total_gen_label.font = Font(bold=True, color="FFFFFF")
+            cell_total_gen_label.alignment = Alignment(horizontal="right")
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
+            
+            cell_total_gen_valor = ws[f'H{row_actual}']
+            cell_total_gen_valor.value = total_movimientos
+            cell_total_gen_valor.fill = PatternFill(start_color="808080", end_color="808080", fill_type="solid")
+            cell_total_gen_valor.font = Font(bold=True, color="FFFFFF")
+            cell_total_gen_valor.alignment = Alignment(horizontal="center")
+            cell_total_gen_valor.number_format = '#,##0.000'
+            
+            row_actual += 1
             
             # ===== FOOTER INV FINAL (en una nueva fila) =====
             # Primero escribir valores, luego fusionar
@@ -1334,6 +1397,73 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
             
             row_actual += 3  # Espacio entre divisiones
         
+        # ===== SECCIÓN TERMINALES MEJILLONES =====
+        color_terminales = "FFD700"  # Dorado para terminales
+        
+        # Header de Terminales Mejillones
+        cell_header_term = ws[f'A{row_actual}']
+        cell_header_term.value = "TERMINALES MEJILLONES"
+        cell_header_term.fill = PatternFill(start_color=color_terminales, end_color=color_terminales, fill_type="solid")
+        cell_header_term.font = Font(bold=True, size=12)
+        cell_header_term.alignment = Alignment(horizontal="center", vertical="center")
+        ws.merge_cells(f'A{row_actual}:L{row_actual}')
+        row_actual += 1
+        
+        # Encabezados de columnas
+        for col_idx, col_name in enumerate(columnas, 1):
+            cell = ws.cell(row=row_actual, column=col_idx)
+            cell.value = col_name
+            cell.fill = PatternFill(start_color=color_terminales, end_color=color_terminales, fill_type="solid")
+            cell.font = Font(bold=True, color="000000")
+            cell.alignment = Alignment(horizontal="center", wrap_text=True)
+        row_actual += 1
+        
+        # Datos de los 3 terminales
+        terminales_mejillones = [
+            {"nombre": "Interacid", "bodega": "CM", "cantidad": 64249.702},
+            {"nombre": "TPM", "bodega": "CM", "cantidad": 8772.753},
+            {"nombre": "Terquim", "bodega": "CM", "cantidad": 5598.250},
+        ]
+        
+        for terminal in terminales_mejillones:
+            # Columna 1: Fecha
+            ws.cell(row=row_actual, column=1).value = fecha_ultimo_dia
+            # Columna 2: Número Factura - Código especial
+            ws.cell(row=row_actual, column=2).value = f"K.E.TIEB.DIC"
+            # Columna 3: Id. Bodega
+            ws.cell(row=row_actual, column=3).value = terminal["bodega"]
+            # Columna 4: Material
+            ws.cell(row=row_actual, column=4).value = "7664-93-9"
+            # Columna 5: Concentración
+            ws.cell(row=row_actual, column=5).value = "Ácido Sulfúrico (Conc: 96)"
+            # Columna 6: Ingreso/Egreso
+            ws.cell(row=row_actual, column=6).value = "E"
+            # Columna 7: Tipo de Movimiento
+            ws.cell(row=row_actual, column=7).value = "TIEB"
+            # Columna 8: Cantidad
+            ws.cell(row=row_actual, column=8).value = terminal["cantidad"]
+            # Columna 9: Unidad
+            ws.cell(row=row_actual, column=9).value = "TN"
+            # Columna 10: Expediente
+            ws.cell(row=row_actual, column=10).value = ""
+            # Columna 11: Rut Codelco
+            ws.cell(row=row_actual, column=11).value = "61.704.000-K"
+            # Columna 12: Nombre Codelco
+            ws.cell(row=row_actual, column=12).value = "Corporación Nacional del Cobre de Chile (Codelco)"
+            
+            # Aplicar color y formato
+            for col in range(1, 13):
+                cell = ws.cell(row=row_actual, column=col)
+                cell.fill = PatternFill(start_color=color_terminales, end_color=color_terminales, fill_type="solid")
+                if col == 8:  # Cantidad
+                    cell.number_format = '#,##0.000'
+                if col == 1:  # Fecha
+                    cell.number_format = 'DD-MM-YYYY'
+            
+            row_actual += 1
+        
+        row_actual += 2  # Espacio después de terminales
+        
         # Ajustar anchos de columna
         ws = writer.sheets['Datos']
         # Anchos: Fecha, Nº Factura, Bodega, CAS, Concentración, I/E, Tipo Mov, Cantidad, Unidad, Expediente, Rut, Nombre
@@ -1362,7 +1492,7 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
     st.download_button(
         "📥 Descargar Excel Intermedio",
         buffer_intermedio,
-        file_name=f"Intermedio_SIREGAD_{fecha}.xlsx",
+        file_name=f"Intermedio_SIREGAD_{fecha_ultimo_dia.strftime('%Y-%m-%d')}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
@@ -1389,32 +1519,111 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
 
     # Generar Batch SIREGAD
     if st.button("🚀 Generar Batch SIREGAD"):
-        # Filtrar solo registros que van al batch
-        df_batch = df_completo[df_completo["IncludeBatch"] == True].copy()
+        # Filtrar solo registros que van al batch (excluyendo inventarios inicial y final)
+        df_batch = df_completo[
+            (df_completo["IncludeBatch"] == True) & 
+            (~df_completo["Concepto"].str.contains("inventario", na=False))
+        ].copy()
         
         if df_batch.empty:
             st.warning("No hay registros para incluir en el batch.")
             st.stop()
         
-        buffer = io.BytesIO()
+        # Asegurar que existan las columnas necesarias
+        for col in ["Concentracion", "Expediente", "Rut", "Nombre"]:
+            if col not in df_batch.columns:
+                df_batch[col] = ""
+        
+        # Agrupar por "Grupo" sumando cantidades
+        df_batch_agrupado = df_batch.groupby("Grupo", as_index=False).agg({
+            "Cantidad": "sum",
+            "Bodega": "first",
+            "Material": "first",
+            "Tipo Movimiento": "first",
+            "Movimiento": "first",
+            "Unidad": "first",
+            "Concentracion": "first",
+            "Expediente": "first",
+            "Rut": "first",
+            "Nombre": "first"
+        }).copy()
+        
+        # Crear archivo Excel desde cero
+        buffer_batch = io.BytesIO()
+        
+        with pd.ExcelWriter(buffer_batch, engine='openpyxl') as writer:
+            df_dummy = pd.DataFrame()
+            df_dummy.to_excel(writer, sheet_name='Datos', index=False)
+            ws = writer.sheets['Datos']
+            
+            # Header amarillo
+            columnas = ["dd-mm-aaaa", "Número Factura", "Id. Bodega", "SQC CAS/Nombre Mezcla", 
+                       "Concentración (0,00000)", "Ingreso/Egreso", "Tipo de Movimiento", "Cantidad", 
+                       "Unidad Medida", "Expediente Comunicación Anticipada", "Rut", "Nombre"]
+            
+            for col_idx, col_name in enumerate(columnas, 1):
+                cell = ws.cell(row=1, column=col_idx)
+                cell.value = col_name
+                cell.fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+                cell.font = Font(bold=True)
+                cell.alignment = Alignment(horizontal="center", wrap_text=True)
+            
+            # Escribir datos sin colores
+            row_num = 2
+            for idx, row in df_batch_agrupado.iterrows():
+                movimiento = row.get("Movimiento", "")
+                tipo_mov = row.get("Tipo Movimiento", "")
+                grupo = row.get("Grupo", "")
+                
+                # Generar número de factura
+                if not (movimiento == "E" and tipo_mov == "VENT"):
+                    if "ajuste_manual" in grupo.lower():
+                        numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
+                    else:
+                        numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
+                else:
+                    numero_factura = f"'{grupo}'"
+                
+                ws.cell(row=row_num, column=1).value = fecha_ultimo_dia
+                ws.cell(row=row_num, column=1).number_format = 'DD-MM-YYYY'
+                ws.cell(row=row_num, column=2).value = numero_factura
+                ws.cell(row=row_num, column=3).value = row.get("Bodega", "")
+                ws.cell(row=row_num, column=4).value = row.get("Material", "")
+                conc = row.get("Concentracion", "")
+                ws.cell(row=row_num, column=5).value = conc if conc else "Ácido Sulfúrico (Conc: 96)"
+                ws.cell(row=row_num, column=6).value = movimiento
+                ws.cell(row=row_num, column=7).value = tipo_mov
+                ws.cell(row=row_num, column=8).value = row.get("Cantidad", 0)
+                ws.cell(row=row_num, column=8).number_format = '#,##0.000'
+                ws.cell(row=row_num, column=9).value = row.get("Unidad", "TN")
+                ws.cell(row=row_num, column=10).value = row.get("Expediente", "")
+                rut = row.get("Rut", "")
+                ws.cell(row=row_num, column=11).value = rut if rut else "61.704.000-K"
+                nombre = row.get("Nombre", "")
+                ws.cell(row=row_num, column=12).value = nombre if nombre else "Corporación Nacional del Cobre de Chile (Codelco)"
+                
+                row_num += 1
+            
+            # Ajustar anchos de columna
+            ws.column_dimensions['A'].width = 12
+            ws.column_dimensions['B'].width = 20
+            ws.column_dimensions['C'].width = 12
+            ws.column_dimensions['D'].width = 18
+            ws.column_dimensions['E'].width = 25
+            ws.column_dimensions['F'].width = 10
+            ws.column_dimensions['G'].width = 18
+            ws.column_dimensions['H'].width = 12
+            ws.column_dimensions['I'].width = 12
+            ws.column_dimensions['J'].width = 20
+            ws.column_dimensions['K'].width = 15
+            ws.column_dimensions['L'].width = 45
 
-        try:
-            escribir_batch(
-                df_batch,
-                "templates/PlantillaCargaInventarioBatch_CODELCO.xlsx",
-                buffer,
-            )
-        except FileNotFoundError:
-            st.error("No se encontró la plantilla en templates/PlantillaCargaInventarioBatch_CODELCO.xlsx")
-            st.stop()
-        except Exception as exc:
-            st.error(f"No se pudo generar el batch: {exc}")
-            st.stop()
-
+        st.success(f"✅ Batch generado con {len(df_batch_agrupado)} registros")
+        
         st.download_button(
             "📥 Descargar Batch SIREGAD",
-            buffer,
-            file_name=f"Batch_SIREGAD_{fecha}.xlsx",
+            buffer_batch,
+            file_name=f"Batch_SIREGAD_{fecha_ultimo_dia.strftime('%Y-%m-%d')}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
 
@@ -1446,11 +1655,13 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
         
         row_actual = 1
         
+        # Verde manzana pastel para todas las divisiones
+        color_verde_manzana = "C1E1C1"
         colores_division = {
-            "Salvador": "FFFF99", "Caletones": "FFA500", "Potrerillos": "90EE90",
-            "TBA": "87CEEB", "San Antonio": "F0E68C", "Chuquicamata": "DDA0DD",
-            "Radomiro Tomic": "FFB6C1", "Gabriela Mistral": "D8BFD8",
-            "Ministro Hales": "98FB98", "Barquito": "ADD8E6",
+            "Salvador": color_verde_manzana, "Caletones": color_verde_manzana, "Potrerillos": color_verde_manzana,
+            "TBA": color_verde_manzana, "San Antonio": color_verde_manzana, "Chuquicamata": color_verde_manzana,
+            "Radomiro Tomic": color_verde_manzana, "Gabriela Mistral": color_verde_manzana,
+            "Ministro Hales": color_verde_manzana, "Barquito": color_verde_manzana,
         }
         
         columnas = ["dd-mm-aaaa", "Número Factura", "Id. Bodega", "SQC CAS/Nombre Mezcla", 
@@ -1465,6 +1676,15 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
         # Filtrar divisiones que existen en df_completo y mantener el orden
         divisiones_ordenadas = [div for div in orden_divisiones if div in df_completo["Division"].unique()]
         
+        # ===== HEADER GLOBAL (UNA SOLA VEZ AL INICIO) =====
+        for col_idx, col_name in enumerate(columnas, 1):
+            cell = ws.cell(row=row_actual, column=col_idx)
+            cell.value = col_name
+            cell.fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+            cell.font = Font(bold=True, color="FFFFFF", size=11)
+            cell.alignment = Alignment(horizontal="center", wrap_text=True)
+        row_actual += 1
+        
         for division in divisiones_ordenadas:
             df_div = df_completo[df_completo["Division"] == division].copy()
             
@@ -1477,33 +1697,19 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
             color = colores_division.get(division, "FFFFFF")
             
             # Header de división
-            ws[f'A{row_actual}'] = f"DIVISIÓN: {division.upper()}"
-            ws.merge_cells(f'A{row_actual}:L{row_actual}')
+            ws[f'A{row_actual}'] = division.upper()
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
             cell = ws[f'A{row_actual}']
             cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-            cell.font = Font(bold=True, size=14)
-            cell.alignment = Alignment(horizontal="center")
-            row_actual += 1
+            cell.font = Font(bold=True, size=12)
+            cell.alignment = Alignment(horizontal="left")
             
-            # INV INICIAL
-            ws[f'A{row_actual}'] = "INV INICIAL"
-            ws[f'A{row_actual}'].fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
-            ws[f'A{row_actual}'].font = Font(bold=True)
-            ws.merge_cells(f'A{row_actual}:B{row_actual}')
-            ws[f'C{row_actual}'] = inv_inicial
-            ws[f'C{row_actual}'].fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
-            ws[f'C{row_actual}'].font = Font(bold=True)
-            ws[f'C{row_actual}'].number_format = '#,##0.000'
-            ws.merge_cells(f'C{row_actual}:D{row_actual}')
-            row_actual += 1
-            
-            # Encabezados de columna
-            for col_idx, col_name in enumerate(columnas, 1):
-                cell = ws.cell(row=row_actual, column=col_idx)
-                cell.value = col_name
-                cell.fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
-                cell.font = Font(bold=True, color="FFFFFF")
-                cell.alignment = Alignment(horizontal="center", wrap_text=True)
+            # INV INICIAL en columna H
+            ws[f'H{row_actual}'] = inv_inicial
+            ws[f'H{row_actual}'].fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+            ws[f'H{row_actual}'].font = Font(bold=True, size=11)
+            ws[f'H{row_actual}'].alignment = Alignment(horizontal="center")
+            ws[f'H{row_actual}'].number_format = '#,##0.000'
             row_actual += 1
             
             # Datos de movimientos - forzar conversión de IncludeBatch a booleano
@@ -1522,18 +1728,23 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
                 }).copy()
                 
                 for idx, row in df_batch_agrupado.iterrows():
-                    ws.cell(row=row_actual, column=1).value = fecha
+                    ws.cell(row=row_actual, column=1).value = fecha_ultimo_dia
                     
                     # Columna 2: Número Factura - Generar código especial para NO VENT
                     movimiento = row.get("Movimiento", "")
                     tipo_mov = row.get("Tipo Movimiento", "")
+                    grupo = row.get("Grupo", "")
                     
-                    # Si NO es "E VENT", generar el código K.[movimiento].[tipo_mov].DIC
+                    # Si NO es "E VENT", generar el código
                     if not (movimiento == "E" and tipo_mov == "VENT"):
-                        numero_factura = f"K.{movimiento}.{tipo_mov}.DIC"
+                        # Si es ajuste manual, usar 'Ajuste' en lugar del tipo_mov
+                        if "ajuste_manual" in grupo.lower():
+                            numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
+                        else:
+                            numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
                     else:
                         # Para E VENT, usar el grupo (número de factura real)
-                        numero_factura = row.get("Grupo", "")
+                        numero_factura = f"'{grupo}'"
                     
                     ws.cell(row=row_actual, column=2).value = numero_factura
                     ws.cell(row=row_actual, column=3).value = row.get("Bodega", "")
@@ -1559,6 +1770,64 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
                             cell.number_format = 'DD-MM-YYYY'
                     row_actual += 1
             
+            # ===== TOTALES DE MOVIMIENTOS =====
+            # Total de Ingresos (I)
+            total_ingresos = df_div[(df_div["Movimiento"] == "I") & (~df_div["Concepto"].str.contains("inventario", na=False))]["Cantidad"].sum()
+            
+            cell_total_i_label = ws[f'A{row_actual}']
+            cell_total_i_label.value = "TOTAL INGRESOS (I)"
+            cell_total_i_label.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_i_label.font = Font(bold=True)
+            cell_total_i_label.alignment = Alignment(horizontal="right")
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
+            
+            cell_total_i_valor = ws[f'H{row_actual}']
+            cell_total_i_valor.value = total_ingresos
+            cell_total_i_valor.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_i_valor.font = Font(bold=True)
+            cell_total_i_valor.alignment = Alignment(horizontal="center")
+            cell_total_i_valor.number_format = '#,##0.000'
+            
+            row_actual += 1
+            
+            # Total de Egresos (E)
+            total_egresos = df_div[(df_div["Movimiento"] == "E") & (~df_div["Concepto"].str.contains("inventario", na=False))]["Cantidad"].sum()
+            
+            cell_total_e_label = ws[f'A{row_actual}']
+            cell_total_e_label.value = "TOTAL EGRESOS (E)"
+            cell_total_e_label.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_e_label.font = Font(bold=True)
+            cell_total_e_label.alignment = Alignment(horizontal="right")
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
+            
+            cell_total_e_valor = ws[f'H{row_actual}']
+            cell_total_e_valor.value = total_egresos
+            cell_total_e_valor.fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+            cell_total_e_valor.font = Font(bold=True)
+            cell_total_e_valor.alignment = Alignment(horizontal="center")
+            cell_total_e_valor.number_format = '#,##0.000'
+            
+            row_actual += 1
+            
+            # Total general (todos los movimientos sin inventarios)
+            total_movimientos = df_div[~df_div["Concepto"].str.contains("inventario", na=False)]["Cantidad"].sum()
+            
+            cell_total_gen_label = ws[f'A{row_actual}']
+            cell_total_gen_label.value = "TOTAL MOVIMIENTOS"
+            cell_total_gen_label.fill = PatternFill(start_color="808080", end_color="808080", fill_type="solid")
+            cell_total_gen_label.font = Font(bold=True, color="FFFFFF")
+            cell_total_gen_label.alignment = Alignment(horizontal="right")
+            ws.merge_cells(f'A{row_actual}:G{row_actual}')
+            
+            cell_total_gen_valor = ws[f'H{row_actual}']
+            cell_total_gen_valor.value = total_movimientos
+            cell_total_gen_valor.fill = PatternFill(start_color="808080", end_color="808080", fill_type="solid")
+            cell_total_gen_valor.font = Font(bold=True, color="FFFFFF")
+            cell_total_gen_valor.alignment = Alignment(horizontal="center")
+            cell_total_gen_valor.number_format = '#,##0.000'
+            
+            row_actual += 1
+            
             # Footer con inventarios finales
             ws[f'A{row_actual}'] = "INV FINAL (CALCULADO)"
             ws[f'A{row_actual}'].fill = PatternFill(start_color="FF69B4", end_color="FF69B4", fill_type="solid")
@@ -1579,6 +1848,60 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
             ws.merge_cells(f'G{row_actual}:H{row_actual}')
             row_actual += 2
         
+        # ===== SECCIÓN TERMINALES MEJILLONES =====
+        color_terminales = "FFD700"  # Dorado para terminales
+        
+        # Header de Terminales Mejillones
+        ws[f'A{row_actual}'] = "TERMINALES MEJILLONES"
+        ws.merge_cells(f'A{row_actual}:L{row_actual}')
+        cell = ws[f'A{row_actual}']
+        cell.fill = PatternFill(start_color=color_terminales, end_color=color_terminales, fill_type="solid")
+        cell.font = Font(bold=True, size=14)
+        cell.alignment = Alignment(horizontal="center")
+        row_actual += 1
+        
+        # Encabezados de columnas
+        for col_idx, col_name in enumerate(columnas, 1):
+            cell = ws.cell(row=row_actual, column=col_idx)
+            cell.value = col_name
+            cell.fill = PatternFill(start_color=color_terminales, end_color=color_terminales, fill_type="solid")
+            cell.font = Font(bold=True, color="000000")
+            cell.alignment = Alignment(horizontal="center", wrap_text=True)
+        row_actual += 1
+        
+        # Datos de los 3 terminales
+        terminales_mejillones = [
+            {"nombre": "Interacid", "bodega": "MEJICL", "cantidad": 64249.702},
+            {"nombre": "TPM", "bodega": "MEJ", "cantidad": 8772.753},
+            {"nombre": "Terquim", "bodega": "TERMEJ", "cantidad": 5598.250},
+        ]
+        
+        for terminal in terminales_mejillones:
+            ws.cell(row=row_actual, column=1).value = fecha_ultimo_dia
+            ws.cell(row=row_actual, column=2).value = f"K.E.TIEB.DIC"
+            ws.cell(row=row_actual, column=3).value = terminal["bodega"]
+            ws.cell(row=row_actual, column=4).value = "7664-93-9"
+            ws.cell(row=row_actual, column=5).value = "Ácido Sulfúrico (Conc: 96)"
+            ws.cell(row=row_actual, column=6).value = "E"
+            ws.cell(row=row_actual, column=7).value = "TIEB"
+            ws.cell(row=row_actual, column=8).value = terminal["cantidad"]
+            ws.cell(row=row_actual, column=9).value = "TN"
+            ws.cell(row=row_actual, column=10).value = ""
+            ws.cell(row=row_actual, column=11).value = "61.704.000-K"
+            ws.cell(row=row_actual, column=12).value = "Corporación Nacional del Cobre de Chile (Codelco)"
+            
+            for col in range(1, 13):
+                cell = ws.cell(row=row_actual, column=col)
+                cell.fill = PatternFill(start_color=color_terminales, end_color=color_terminales, fill_type="solid")
+                if col == 8:
+                    cell.number_format = '#,##0.000'
+                if col == 1:
+                    cell.number_format = 'DD-MM-YYYY'
+            
+            row_actual += 1
+        
+        row_actual += 2
+        
         # Ajustar ancho de columnas
         for col_idx in range(1, 13):
             ws.column_dimensions[get_column_letter(col_idx)].width = 15
@@ -1588,7 +1911,7 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
     st.download_button(
         "📥 Descargar Excel Intermedio (Actualizado)",
         buffer_intermedio,
-        file_name=f"Intermedio_SIREGAD_{fecha}.xlsx",
+        file_name=f"Intermedio_SIREGAD_{fecha_ultimo_dia.strftime('%Y-%m-%d')}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         key="download_intermedio_persistente"
     )
@@ -1615,26 +1938,110 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
     
     # Botón para generar Batch
     if st.button("🚀 Generar Batch SIREGAD", key="btn_batch_persistente"):
-        df_batch = df_completo[df_completo["IncludeBatch"] == True].copy()
+        # Filtrar solo registros que van al batch (excluyendo inventarios)
+        df_batch = df_completo[
+            (df_completo["IncludeBatch"] == True) & 
+            (~df_completo["Concepto"].str.contains("inventario", na=False))
+        ].copy()
         
         if df_batch.empty:
             st.warning("No hay registros para incluir en el batch.")
         else:
-            buffer = io.BytesIO()
-            try:
-                escribir_batch(
-                    df_batch,
-                    "templates/PlantillaCargaInventarioBatch_CODELCO.xlsx",
-                    buffer,
-                )
-                st.download_button(
-                    "📥 Descargar Batch SIREGAD",
-                    buffer,
-                    file_name=f"Batch_SIREGAD_{fecha}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    key="download_batch_persistente"
-                )
-            except FileNotFoundError:
-                st.error("No se encontró la plantilla en templates/PlantillaCargaInventarioBatch_CODELCO.xlsx")
-            except Exception as exc:
-                st.error(f"No se pudo generar el batch: {exc}")
+            # Asegurar que existan las columnas necesarias
+            for col in ["Concentracion", "Expediente", "Rut", "Nombre"]:
+                if col not in df_batch.columns:
+                    df_batch[col] = ""
+            
+            # Agrupar por "Grupo" sumando cantidades
+            df_batch_agrupado = df_batch.groupby("Grupo", as_index=False).agg({
+                "Cantidad": "sum",
+                "Bodega": "first",
+                "Material": "first",
+                "Tipo Movimiento": "first",
+                "Movimiento": "first",
+                "Unidad": "first",
+                "Concentracion": "first",
+                "Expediente": "first",
+                "Rut": "first",
+                "Nombre": "first"
+            }).copy()
+            
+            # Crear archivo Excel desde cero
+            buffer_batch = io.BytesIO()
+            
+            with pd.ExcelWriter(buffer_batch, engine='openpyxl') as writer:
+                df_dummy = pd.DataFrame()
+                df_dummy.to_excel(writer, sheet_name='Datos', index=False)
+                ws = writer.sheets['Datos']
+                
+                # Header amarillo
+                columnas = ["dd-mm-aaaa", "Número Factura", "Id. Bodega", "SQC CAS/Nombre Mezcla", 
+                           "Concentración (0,00000)", "Ingreso/Egreso", "Tipo de Movimiento", "Cantidad", 
+                           "Unidad Medida", "Expediente Comunicación Anticipada", "Rut", "Nombre"]
+                
+                for col_idx, col_name in enumerate(columnas, 1):
+                    cell = ws.cell(row=1, column=col_idx)
+                    cell.value = col_name
+                    cell.fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+                    cell.font = Font(bold=True)
+                    cell.alignment = Alignment(horizontal="center", wrap_text=True)
+                
+                # Escribir datos sin colores
+                row_num = 2
+                for idx, row in df_batch_agrupado.iterrows():
+                    movimiento = row.get("Movimiento", "")
+                    tipo_mov = row.get("Tipo Movimiento", "")
+                    grupo = row.get("Grupo", "")
+                    
+                    # Generar número de factura
+                    if not (movimiento == "E" and tipo_mov == "VENT"):
+                        if "ajuste_manual" in grupo.lower():
+                            numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
+                        else:
+                            numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
+                    else:
+                        numero_factura = f"'{grupo}'"
+                    
+                    ws.cell(row=row_num, column=1).value = fecha_ultimo_dia
+                    ws.cell(row=row_num, column=1).number_format = 'DD-MM-YYYY'
+                    ws.cell(row=row_num, column=2).value = numero_factura
+                    ws.cell(row=row_num, column=3).value = row.get("Bodega", "")
+                    ws.cell(row=row_num, column=4).value = row.get("Material", "")
+                    conc = row.get("Concentracion", "")
+                    ws.cell(row=row_num, column=5).value = conc if conc else "Ácido Sulfúrico (Conc: 96)"
+                    ws.cell(row=row_num, column=6).value = movimiento
+                    ws.cell(row=row_num, column=7).value = tipo_mov
+                    ws.cell(row=row_num, column=8).value = row.get("Cantidad", 0)
+                    ws.cell(row=row_num, column=8).number_format = '#,##0.000'
+                    ws.cell(row=row_num, column=9).value = row.get("Unidad", "TN")
+                    ws.cell(row=row_num, column=10).value = row.get("Expediente", "")
+                    rut = row.get("Rut", "")
+                    ws.cell(row=row_num, column=11).value = rut if rut else "61.704.000-K"
+                    nombre = row.get("Nombre", "")
+                    ws.cell(row=row_num, column=12).value = nombre if nombre else "Corporación Nacional del Cobre de Chile (Codelco)"
+                    
+                    row_num += 1
+                
+                # Ajustar anchos de columna
+                ws.column_dimensions['A'].width = 12
+                ws.column_dimensions['B'].width = 20
+                ws.column_dimensions['C'].width = 12
+                ws.column_dimensions['D'].width = 18
+                ws.column_dimensions['E'].width = 25
+                ws.column_dimensions['F'].width = 10
+                ws.column_dimensions['G'].width = 18
+                ws.column_dimensions['H'].width = 12
+                ws.column_dimensions['I'].width = 12
+                ws.column_dimensions['J'].width = 20
+                ws.column_dimensions['K'].width = 15
+                ws.column_dimensions['L'].width = 45
+            
+            st.success(f"✅ Batch generado con {len(df_batch_agrupado)} registros")
+            
+            st.download_button(
+                "📥 Descargar Batch SIREGAD",
+                buffer_batch,
+                file_name=f"Batch_SIREGAD_{fecha_ultimo_dia.strftime('%Y-%m-%d')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                key="download_batch_persistente"
+            )

@@ -92,157 +92,47 @@ CONFIG_POTRERILLOS = {
         "tipo_mov": "",
         "movimiento": "",
         "bodega": "SALPO",
-        "material": "7664-93-9"
-    },
-    "ajuste_tas": {
-        "sheet": "Dic 2025",
-        "cell": "E25",
-        "tipo_mov": "(preguntar)",
-        "movimiento": "I",
-        "bodega": "SALPO",
-        "material": "7664-93-9"
+        "material": "7664-93-9",
+        "include_in_batch": False,
     },
     "ventas": {
         "sheet": "Dic 2025",
-        "cell": "E37",
+        "cell": "E28",
         "tipo_mov": "VENT",
         "movimiento": "E",
         "bodega": "SALPO",
-        "material": "7664-93-9"
-    },
-
-    # Nuevos movimientos solicitados desde Potrerillos
-    "ingreso_neto_almacenes": {
-        "sheet": "Dic 2025",
-        "cell": "D1",
-        "tipo_mov": "MPRO",
-        "movimiento": "I",
-        "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-        "include_if_zero": True
-    },
-    "ingreso_neto_detalle_d14_d17": {
-        "sheet": "Dic 2025",
-        "cell": "D14:D17",
-        "tipo_mov": "MPRO",
-        "movimiento": "I",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "include_if_zero": True,
-        "grupo": "ingresos_neto"
-    },
-    "ajuste_tas": {
-        "sheet": "Dic 2025",
-        "cell": "D25",
-        "tipo_mov": "EDEV (se agrega?)",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-        "include_if_zero": True
     },
     "consumo_refineria": {
-        "sheet": "Noviembre 2025",
-        "cell": "D30",
-        "tipo_mov": "ECIP",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-    },
-    "salidas_por_ventas_picking_facturas": {
-        "sheet": "Dic 2025",
-        "cell": "D28",
-        "tipo_mov": "VENT",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-    },
-    "salidas_por_ventas_picking_facturas": {
-        "sheet": "Dic 2025",
-        "cell": "D29",
-        "tipo_mov": "VENT",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-    },
-    "salidas_por_ventas_picking_facturas": {
         "sheet": "Dic 2025",
         "cell": "D30",
-        "tipo_mov": "MCIP",
-        "movimiento": "I",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-    },
-    "salidas_por_ventas_picking_facturas": {
-        "sheet": "Dic 2025",
-        "cell": "D31",
         "tipo_mov": "ECIP",
         "movimiento": "E",
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
     },
-    "salidas_por_ventas_picking_facturas": {
+    "ajuste_manual": {
         "sheet": "Dic 2025",
-        "cell": "D32",
-        "tipo_mov": "",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-    },
-    "salidas_por_ventas_picking_facturas": {
-        "sheet": "Dic 2025",
-        "cell": "D33",
+        "cell": "D99",  # Celda placeholder - valor manual
         "tipo_mov": "ECIP",
         "movimiento": "E",
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": True,
-    },
-    "rebaja_por_ventas_consumos": {
-        "sheet": "Dic 2025",
-        "cell": "D34",
-        "tipo_mov": "",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
-    },
-    "consumo_desde_proceso_plantas_gases": {
-        "sheet": "Dic 2025",
-        "cell": "D36",
-        "tipo_mov": "ECIP",
-        "movimiento": "E",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": True,
+        "valor_manual": 28.670
     },
     "inventario_final": {
         "sheet": "Dic 2025",
-        "cell": "D37",
+        "cell": "E37",
         "tipo_mov": "",
         "movimiento": "",
         "bodega": "SALPO",
         "material": "7664-93-9",
         "include_in_batch": False,
     },
-    "total_libre_disposicion_almacenes_mat_114": {
-        "sheet": "Dic 2025",
-        "cell": "E52",
-        "tipo_mov": "MPRO",
-        "movimiento": "I",
-        "bodega": "SALPO",
-        "material": "7664-93-9",
-        "include_in_batch": False,
-        "grupo": "total_libre_disposicion"
-    }
+
 }
 
 # CALETONES
@@ -1498,15 +1388,16 @@ CONFIG_BARQUITO = {
 
 # DGM - GABRIELA MISTRAL
 CONFIG_DGM = {
-    # 🔹 Inventario inicial (se obtendrá de otro Excel, por ahora placeholder)
+    # 🔹 Inventario inicial (valor manual del mes anterior)
     "inventario_inicial": {
         "sheet": "Acido ",
-        "cell": "A1",  # Placeholder - se actualizará cuando se proporcione el Excel
-        "tipo_mov": "MPRO",
-        "movimiento": "I",
-        "bodega": "DGM",
+        "cell": "A1",  # Placeholder
+        "tipo_mov": "",
+        "movimiento": "",
+        "bodega": "GM",
         "material": "7664-93-9",
-        "include_in_batch": False
+        "include_in_batch": False,
+        "valor_manual": 17489.841
     },
     
     # 🔹 E42 → I TIPB (Recepción)
@@ -1515,7 +1406,7 @@ CONFIG_DGM = {
         "cell": "E42",
         "tipo_mov": "TIPB",
         "movimiento": "I",
-        "bodega": "DGM",
+        "bodega": "GM",
         "material": "7664-93-9",
         "include_in_batch": True
     },
@@ -1526,7 +1417,7 @@ CONFIG_DGM = {
         "cell": "J42",
         "tipo_mov": "ECIP",
         "movimiento": "E",
-        "bodega": "DGM",
+        "bodega": "GM",
         "material": "7664-93-9",
         "include_in_batch": True
     }

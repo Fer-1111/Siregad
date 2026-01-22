@@ -71,52 +71,57 @@ def extraer_movimientos(path_excel, config, fecha, division):
 
     for concepto, cfg in config.items():
         try:
-            hoja_requerida = cfg["sheet"]
-
-            # Verificar si la hoja existe (tolerante a mayúsculas/acentos/espacios)
-            matched = find_sheet_name(hoja_requerida, hojas_disponibles)
-            if not matched:
-                print(f"[DEBUG] WARNING: La hoja solicitada '{hoja_requerida}' NO existe. Hojas: {hojas_disponibles}")
-                # Saltar este concepto en lugar de fallar toda la extracción
-                continue
-
-            ws = wb[matched]
-
-            # Detectar si es un rango (ej: K10:K13) o una celda simple
-            celda = cfg["cell"]
-            valor = None
-            if ":" in celda:
-                # Es un rango, sumar todas las celdas de forma eficiente usando iter_rows
-                min_col, min_row, max_col, max_row = range_boundaries(celda)
-                suma = 0.0
-                found = False
-                for row_vals in ws.iter_rows(min_row=min_row, max_row=max_row,
-                                             min_col=min_col, max_col=max_col,
-                                             values_only=True):
-                    for cell_val in row_vals:
-                        n = parse_numeric(cell_val)
-                        if n is not None:
-                            suma += n
-                            found = True
-                valor = suma if found else None
+            # Verificar si hay un valor manual definido
+            if "valor_manual" in cfg:
+                valor = cfg["valor_manual"]
+                print(f"✓ {concepto}: Valor manual = {valor}")
             else:
-                # Es una celda simple, obtener por coordenadas y parsear
-                col_letter, row = coordinate_from_string(celda)
-                col = column_index_from_string(col_letter)
-                cell_obj = ws.cell(row=row, column=col)
-                cell_val = cell_obj.value
-                # Debug detallado para diagnóstico con tipo de dato y fórmula si existe
-                cell_type = type(cell_val).__name__
-                has_formula = hasattr(cell_obj, 'data_type') and cell_obj.data_type == 'f'
-                debug_msg = f"📍 {concepto}: Hoja='{matched}' | Celda={celda} (Row{row}Col{col}) | Tipo={cell_type} | Raw={repr(cell_val)}"
-                if has_formula:
-                    debug_msg += f" | Fórmula detectada"
-                print(debug_msg)
-                valor = parse_numeric(cell_val) if cell_val is not None else None
-                print(f"   → Parseado: {valor}")
+                hoja_requerida = cfg["sheet"]
 
-            if valor is not None:
-                print(f"✓ {concepto}: {celda} = {valor}")
+                # Verificar si la hoja existe (tolerante a mayúsculas/acentos/espacios)
+                matched = find_sheet_name(hoja_requerida, hojas_disponibles)
+                if not matched:
+                    print(f"[DEBUG] WARNING: La hoja solicitada '{hoja_requerida}' NO existe. Hojas: {hojas_disponibles}")
+                    # Saltar este concepto en lugar de fallar toda la extracción
+                    continue
+
+                ws = wb[matched]
+
+                # Detectar si es un rango (ej: K10:K13) o una celda simple
+                celda = cfg["cell"]
+                valor = None
+                if ":" in celda:
+                    # Es un rango, sumar todas las celdas de forma eficiente usando iter_rows
+                    min_col, min_row, max_col, max_row = range_boundaries(celda)
+                    suma = 0.0
+                    found = False
+                    for row_vals in ws.iter_rows(min_row=min_row, max_row=max_row,
+                                                 min_col=min_col, max_col=max_col,
+                                                 values_only=True):
+                        for cell_val in row_vals:
+                            n = parse_numeric(cell_val)
+                            if n is not None:
+                                suma += n
+                                found = True
+                    valor = suma if found else None
+                else:
+                    # Es una celda simple, obtener por coordenadas y parsear
+                    col_letter, row = coordinate_from_string(celda)
+                    col = column_index_from_string(col_letter)
+                    cell_obj = ws.cell(row=row, column=col)
+                    cell_val = cell_obj.value
+                    # Debug detallado para diagnóstico con tipo de dato y fórmula si existe
+                    cell_type = type(cell_val).__name__
+                    has_formula = hasattr(cell_obj, 'data_type') and cell_obj.data_type == 'f'
+                    debug_msg = f"📍 {concepto}: Hoja='{matched}' | Celda={celda} (Row{row}Col{col}) | Tipo={cell_type} | Raw={repr(cell_val)}"
+                    if has_formula:
+                        debug_msg += f" | Fórmula detectada"
+                    print(debug_msg)
+                    valor = parse_numeric(cell_val) if cell_val is not None else None
+                    print(f"   → Parseado: {valor}")
+
+                if valor is not None:
+                    print(f"✓ {concepto}: {celda} = {valor}")
 
             # Saltar si el valor es None o 0 (pero incluir si es inventario
             # o si la configuración indica explícitamente incluir ceros)
