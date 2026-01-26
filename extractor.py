@@ -58,6 +58,14 @@ def extraer_movimientos(path_excel, config, fecha, division):
         for name in available_names:
             if name.lower() == requested.lower():
                 return name
+        # try exact match ignoring accents but keeping spaces and parentheses
+        req_no_accent = unicodedata.normalize('NFKD', requested.lower())
+        req_no_accent = ''.join(c for c in req_no_accent if not unicodedata.combining(c))
+        for name in available_names:
+            name_no_accent = unicodedata.normalize('NFKD', name.lower())
+            name_no_accent = ''.join(c for c in name_no_accent if not unicodedata.combining(c))
+            if name_no_accent == req_no_accent:
+                return name
         # try normalized match (remove accents and spaces)
         req_norm = normalize_sheet_name(requested)
         for name in available_names:

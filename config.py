@@ -312,16 +312,17 @@ CONFIG_TBA = {
         "movimiento": "I",
         "bodega": "TETBA",
         "material": "7664-93-9",
-        "include_in_batch": True
-    },
+        "include_in_batch": False
+    },##agregar
     "ajuste_inventario": {
         "sheet": "Balance",
         "cell": "F10",
-        "tipo_mov": "MDEV(revisar)",
+        "tipo_mov": "MDEV",
         "movimiento": "I",
         "bodega": "TETBA",
         "material": "7664-93-9",
-        "include_in_batch": True
+        "include_in_batch": True,
+        "include_if_zero": True
     },
     # Entregado F17 a F22 - TIEB
     "entregado_f17": {
@@ -498,7 +499,7 @@ CONFIG_SAN_ANTONIO = {
 # RT RADOMIRO TOMIC
 CONFIG_RT = {
     "inventario_inicial": {
-        "sheet": "ÁCIDO",
+        "sheet": "ÁCIDO (SAP)",
         "cell": "E13",
         "tipo_mov": "",
         "movimiento": "",
@@ -506,26 +507,26 @@ CONFIG_RT = {
         "material": "7664-93-9",
         "include_in_batch": False
     },
-    "retiro": {
-        "sheet": "ÁCIDO",
-        "cell": "e29",
-        "tipo_mov": "ECIP",
-        "movimiento": "E",
-        "bodega": "RT",
-        "material": "7664-93-9",
-        "include_in_batch": True
-    },
     "recepcion": {
-        "sheet": "ÁCIDO",
-        "cell": "E24",
+        "sheet": "ÁCIDO (SAP)",
+        "cell": "E22",
         "tipo_mov": "TIPB",
         "movimiento": "I",
         "bodega": "RT",
         "material": "7664-93-9",
         "include_in_batch": True
     },
+    "salida": {
+        "sheet": "ÁCIDO (SAP)",
+        "cell": "E27",
+        "tipo_mov": "ECIP",
+        "movimiento": "E",
+        "bodega": "RT",
+        "material": "7664-93-9",
+        "include_in_batch": True
+    },
     "inventario_final": {
-        "sheet": "ÁCIDO",
+        "sheet": "ÁCIDO (SAP)",
         "cell": "E38",
         "tipo_mov": "",
         "movimiento": "",

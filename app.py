@@ -1236,8 +1236,8 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
                 
                 # Si NO es "E VENT", generar el código
                 if not (movimiento == "E" and tipo_mov == "VENT"):
-                    # Si es ajuste manual, usar 'Ajuste' en lugar del tipo_mov
-                    if "ajuste_manual" in grupo.lower():
+                    # Si es ajuste (manual o inventario), usar 'Ajuste' en lugar del tipo_mov
+                    if "ajuste" in grupo.lower():
                         numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
                     else:
                         numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
@@ -1522,7 +1522,7 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
         # Filtrar solo registros que van al batch (excluyendo inventarios inicial y final)
         df_batch = df_completo[
             (df_completo["IncludeBatch"] == True) & 
-            (~df_completo["Concepto"].str.contains("inventario", na=False))
+            (~df_completo["Concepto"].str.contains("inventario_inicial|inventario_final", na=False, regex=True))
         ].copy()
         
         if df_batch.empty:
@@ -1577,7 +1577,7 @@ if st.button("🚀 Cargar y Procesar", type="primary", use_container_width=True)
                 
                 # Generar número de factura
                 if not (movimiento == "E" and tipo_mov == "VENT"):
-                    if "ajuste_manual" in grupo.lower():
+                    if "ajuste" in grupo.lower():
                         numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
                     else:
                         numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
@@ -1737,8 +1737,8 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
                     
                     # Si NO es "E VENT", generar el código
                     if not (movimiento == "E" and tipo_mov == "VENT"):
-                        # Si es ajuste manual, usar 'Ajuste' en lugar del tipo_mov
-                        if "ajuste_manual" in grupo.lower():
+                        # Si es ajuste (manual o inventario), usar 'Ajuste' en lugar del tipo_mov
+                        if "ajuste" in grupo.lower():
                             numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
                         else:
                             numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
@@ -1941,7 +1941,7 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
         # Filtrar solo registros que van al batch (excluyendo inventarios)
         df_batch = df_completo[
             (df_completo["IncludeBatch"] == True) & 
-            (~df_completo["Concepto"].str.contains("inventario", na=False))
+            (~df_completo["Concepto"].str.contains("inventario_inicial|inventario_final", na=False, regex=True))
         ].copy()
         
         if df_batch.empty:
@@ -1995,7 +1995,7 @@ elif "df_completo" in st.session_state and st.session_state.df_completo is not N
                     
                     # Generar número de factura
                     if not (movimiento == "E" and tipo_mov == "VENT"):
-                        if "ajuste_manual" in grupo.lower():
+                        if "ajuste" in grupo.lower():
                             numero_factura = f"'K.{movimiento}.Ajuste.DIC'"
                         else:
                             numero_factura = f"'K.{movimiento}.{tipo_mov}.DIC'"
